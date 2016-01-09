@@ -1,0 +1,15 @@
+[
+{
+  "modid": "ExtendAHand",
+  "name": "Extend-A-Hand",
+  "description": "Extend the player hand for building.",
+  "version": "${version}",
+  "mcversion": "${mcversion}",
+  "url": "",
+  "updateUrl": "",
+  "authorList": ["Arcfalt"],
+  "logoFile": "",
+  "screenshots": [],
+  "dependencies": []
+}
+]

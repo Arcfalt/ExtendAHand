@@ -40,12 +40,12 @@ public class BaseExtendo extends Item
         {
             Set<BlockPos> coordinates;
             //int meta = block.getMetaFromState(blockState);
-            coordinates = actingBlocks(blockPos, mouseOver.sideHit, world);
+            coordinates = actingBlocks(blockPos, mouseOver.sideHit, world, player);
             RenderUtils.renderBlockOverlays(event, player, coordinates, 0.01f);
         }
     }
 
-    protected Set<BlockPos> actingBlocks(BlockPos blockPos, EnumFacing sideHit, World world)
+    protected Set<BlockPos> actingBlocks(BlockPos blockPos, EnumFacing sideHit, World world, EntityPlayerSP player)
     {
         Set<BlockPos> positions = new HashSet<BlockPos>();
         BlockPos offsetPos = blockPos.offset(sideHit);

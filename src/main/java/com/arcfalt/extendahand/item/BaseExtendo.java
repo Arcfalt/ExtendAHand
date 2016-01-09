@@ -43,7 +43,7 @@ public class BaseExtendo extends Item
             //coordinates = findSuitableBlocks(wand, world, mouseOver.sideHit, blockPos, block, meta);
             coordinates = new HashSet<BlockPos>();
             coordinates.add(blockPos);
-            RenderUtils.renderBlockOverlays(event, player, coordinates);
+            RenderUtils.renderBlockOverlays(event, player, coordinates, 0.01f);
         }
     }
 

@@ -48,18 +48,18 @@ public class BaseExtendo extends Item
             //coordinates = findSuitableBlocks(wand, world, mouseOver.sideHit, blockPos, block, meta);
             coordinates = new HashSet<BlockPos>();
             coordinates.add(blockPos);
-            renderOutlines(event, player, coordinates, 1f, 0f, 1f);
+            renderOutlines(event, player, coordinates, 1f, 0f, 1f, .6f);
         }
     }
 
-    private static void renderCubes(Set<BlockPos> coordinates, float r, float g, float b, float thickness, float offset)
+    private static void renderCubes(Set<BlockPos> coordinates, float offset)
     {
         RenderHelper.enableStandardItemLighting();
         Tessellator t = Tessellator.getInstance();
         WorldRenderer renderer = t.getWorldRenderer();
-        renderer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION);
+        renderer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR);
 
-        GlStateManager.color(r, g, b);
+        GlStateManager.color(1f, 1f, 1f, 1f);
         for (BlockPos coordinate : coordinates)
         {
             float x = coordinate.getX();
@@ -79,60 +79,83 @@ public class BaseExtendo extends Item
         z = z - o;
         o = 1f + (o * 2f);
 
+        // alpha
+        float a = .8f;
+
+        // front and back color
+        float r1 = 1f;
+        float g1 = .3f;
+        float b1 = 1f;
+
+        // left and right color
+        float r2 = 1f;
+        float g2 = .15f;
+        float b2 = 1f;
+
+        // top color
+        float r3 = 1f;
+        float g3 = .45f;
+        float b3 = 1f;
+
+        // bottom color
+        float r4 = 1f;
+        float g4 = 0f;
+        float b4 = 1f;
+
         // front
-        renderer.pos(x + o, y + o, z + o).endVertex();
-        renderer.pos(x, y + o, z + o).endVertex();
-        renderer.pos(x, y, z + o).endVertex();
-        renderer.pos(x + o, y, z + o).endVertex();
+        renderer.pos(x + o, y + o, z + o).color(r1, g1, b1, a).endVertex();
+        renderer.pos(x, y + o, z + o).color(r1, g1, b1, a).endVertex();
+        renderer.pos(x, y, z + o).color(r1, g1, b1, a).endVertex();
+        renderer.pos(x + o, y, z + o).color(r1, g1, b1, a).endVertex();
 
         // back
-        renderer.pos(x, y, z).endVertex();
-        renderer.pos(x, y + o, z).endVertex();
-        renderer.pos(x + o, y + o, z).endVertex();
-        renderer.pos(x + o, y, z).endVertex();
+        renderer.pos(x, y, z).color(r1, g1, b1, a).endVertex();
+        renderer.pos(x, y + o, z).color(r1, g1, b1, a).endVertex();
+        renderer.pos(x + o, y + o, z).color(r1, g1, b1, a).endVertex();
+        renderer.pos(x + o, y, z).color(r1, g1, b1, a).endVertex();
 
         // left
-        renderer.pos(x, y + o, z + o).endVertex();
-        renderer.pos(x, y + o, z).endVertex();
-        renderer.pos(x, y, z).endVertex();
-        renderer.pos(x, y, z + o).endVertex();
+        renderer.pos(x, y + o, z + o).color(r2, g2, b2, a).endVertex();
+        renderer.pos(x, y + o, z).color(r2, g2, b2, a).endVertex();
+        renderer.pos(x, y, z).color(r2, g2, b2, a).endVertex();
+        renderer.pos(x, y, z + o).color(r2, g2, b2, a).endVertex();
 
         // right
-        renderer.pos(x + o, y, z).endVertex();
-        renderer.pos(x + o, y + o, z).endVertex();
-        renderer.pos(x + o, y + o, z + o).endVertex();
-        renderer.pos(x + o, y, z + o).endVertex();
+        renderer.pos(x + o, y, z).color(r2, g2, b2, a).endVertex();
+        renderer.pos(x + o, y + o, z).color(r2, g2, b2, a).endVertex();
+        renderer.pos(x + o, y + o, z + o).color(r2, g2, b2, a).endVertex();
+        renderer.pos(x + o, y, z + o).color(r2, g2, b2, a).endVertex();
 
         // top
-        renderer.pos(x, y + o, z).endVertex();
-        renderer.pos(x, y + o, z + o).endVertex();
-        renderer.pos(x + o, y + o, z + o).endVertex();
-        renderer.pos(x + o, y + o, z).endVertex();
+        renderer.pos(x, y + o, z).color(r3, g3, b3, a).endVertex();
+        renderer.pos(x, y + o, z + o).color(r3, g3, b3, a).endVertex();
+        renderer.pos(x + o, y + o, z + o).color(r3, g3, b3, a).endVertex();
+        renderer.pos(x + o, y + o, z).color(r3, g3, b3, a).endVertex();
 
         // bottom
-        renderer.pos(x + o, y, z + o).endVertex();
-        renderer.pos(x, y, z + o).endVertex();
-        renderer.pos(x, y, z).endVertex();
-        renderer.pos(x + o, y, z).endVertex();
+        renderer.pos(x + o, y, z + o).color(r4, g4, b4, a).endVertex();
+        renderer.pos(x, y, z + o).color(r4, g4, b4, a).endVertex();
+        renderer.pos(x, y, z).color(r4, g4, b4, a).endVertex();
+        renderer.pos(x + o, y, z).color(r4, g4, b4, a).endVertex();
     }
 
-    protected static void renderOutlines(RenderWorldLastEvent evt, EntityPlayerSP p, Set<BlockPos> coordinates, float r, float g, float b)
+    protected static void renderOutlines(RenderWorldLastEvent evt, EntityPlayerSP p, Set<BlockPos> coordinates, float r, float g, float b, float a)
     {
         double doubleX = p.lastTickPosX + (p.posX - p.lastTickPosX) * evt.partialTicks;
         double doubleY = p.lastTickPosY + (p.posY - p.lastTickPosY) * evt.partialTicks;
         double doubleZ = p.lastTickPosZ + (p.posZ - p.lastTickPosZ) * evt.partialTicks;
 
         GlStateManager.pushAttrib();
-        GlStateManager.disableDepth();
         GlStateManager.disableTexture2D();
         GlStateManager.disableLighting();
-        GlStateManager.depthMask(false);
+        GlStateManager.enableBlend();
 
         GlStateManager.pushMatrix();
         GlStateManager.translate(-doubleX, -doubleY, -doubleZ);
 
-        //renderOutlines(coordinates, r, g, b, 10f, -0.05f);
-        renderCubes(coordinates, r, g, b, 4f, 0f);
+        float offset = .01f;
+        renderCubes(coordinates, offset);
+        renderOutlines(coordinates, r, g, b, 1.5f, offset);
 
         GlStateManager.popMatrix();
         GlStateManager.popAttrib();
@@ -147,7 +170,7 @@ public class BaseExtendo extends Item
         WorldRenderer worldRenderer = tessellator.getWorldRenderer();
         worldRenderer.begin(GL11.GL_LINES, DefaultVertexFormats.POSITION);
 
-        GlStateManager.color(r, g, b);
+        GlStateManager.color(r, g, b, 1f);
         GL11.glLineWidth(thickness);
 
         for (BlockPos coordinate : coordinates)

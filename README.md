@@ -3,4 +3,3 @@ A minecraft mod for 1.8.9 with the intent of extending the 'hand' on the player 
 
 # Contact
 Website: http://www.arcfalt.com
-Email: me@arcfalt.com

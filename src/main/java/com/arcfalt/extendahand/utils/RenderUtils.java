@@ -16,6 +16,8 @@ public class RenderUtils
 {
     public static void renderBlockOverlays(RenderWorldLastEvent event, EntityPlayerSP player, Set<BlockPos> positions, float sizeOffset)
     {
+        if(positions == null || positions.size() == 0) return;
+
         double doubleX = player.lastTickPosX + (player.posX - player.lastTickPosX) * event.partialTicks;
         double doubleY = player.lastTickPosY + (player.posY - player.lastTickPosY) * event.partialTicks;
         double doubleZ = player.lastTickPosZ + (player.posZ - player.lastTickPosZ) * event.partialTicks;

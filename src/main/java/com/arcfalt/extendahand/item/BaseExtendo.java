@@ -9,6 +9,7 @@ import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
@@ -39,14 +40,20 @@ public class BaseExtendo extends Item
         {
             Set<BlockPos> coordinates;
             //int meta = block.getMetaFromState(blockState);
-
-            //coordinates = findSuitableBlocks(wand, world, mouseOver.sideHit, blockPos, block, meta);
-            coordinates = new HashSet<BlockPos>();
-            coordinates.add(blockPos);
+            coordinates = actingBlocks(blockPos, mouseOver.sideHit, world);
             RenderUtils.renderBlockOverlays(event, player, coordinates, 0.01f);
         }
     }
 
+    protected Set<BlockPos> actingBlocks(BlockPos blockPos, EnumFacing sideHit, World world)
+    {
+        Set<BlockPos> positions = new HashSet<BlockPos>();
+        BlockPos offsetPos = blockPos.offset(sideHit);
 
+        IBlockState blockState = world.getBlockState(offsetPos);
+        Block block = blockState.getBlock();
 
+        if(block.getMaterial() == Material.air) positions.add(offsetPos);
+        return positions;
+    }
 }

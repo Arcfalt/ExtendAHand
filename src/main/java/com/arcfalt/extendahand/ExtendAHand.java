@@ -1,6 +1,7 @@
 package com.arcfalt.extendahand;
 
 import com.arcfalt.extendahand.proxy.CommonProxy;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;

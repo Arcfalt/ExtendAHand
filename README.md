@@ -16,4 +16,5 @@ Currently, all of these are just ideas with no specific order or timeframe.
 - Config options (maximum distance, infinite durability, etc)
 - Plane creation
 - Lines/planes between two specified points (not player position)
+- Even Shapes (like spheres)
 - Symmetry mode

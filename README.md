@@ -2,10 +2,12 @@
 ## Description
 A minecraft mod for 1.8.9 with the intent of extending the 'hand' on the player in building. So far, this mod mainly focuses on allowing for distant block placement, and the creation of lines from distant points to the player's position, simply pulling from the player's inventory. More building functionality is planned to come in future versions.
 
+Preview: http://webmshare.com/DAadM
+
 ## Items
-#### Handy Extendo
+##### Handy Extendo
 This item allows for distant block creation.
-#### Extended Extendo
+##### Extended Extendo
 Allows for line creation between selected point and player position. Useful for creating walls and floors quickly.
 
 ## Future Plans

@@ -21,24 +21,18 @@ import java.util.Set;
 
 public class BaseExtendo extends Item
 {
-	private MovingObjectPosition mouseOver;
-
 	@SideOnly(Side.CLIENT)
 	public void drawHighlight(RenderWorldLastEvent event, EntityPlayerSP player, ItemStack stack)
 	{
 		// Find whatever is under the cursor up to a certain distance away
 		Minecraft minecraft = Minecraft.getMinecraft();
-		mouseOver = minecraft.getRenderViewEntity().rayTrace(90.0, event.partialTicks);
+		MovingObjectPosition mouseOver = minecraft.getRenderViewEntity().rayTrace(90.0, event.partialTicks);
 		if(mouseOver == null) return;
 
 		// Get the block position and make sure it is a block
 		World world = player.worldObj;
 		BlockPos blockPos = mouseOver.getBlockPos();
-		if(blockPos == null)
-		{
-			mouseOver = null;
-			return;
-		}
+		if(blockPos == null) return;
 
 		IBlockState blockState = world.getBlockState(blockPos);
 		Block block = blockState.getBlock();
@@ -46,10 +40,6 @@ public class BaseExtendo extends Item
 		{
 			Set<BlockPos> positions = actingBlocks(blockPos, mouseOver.sideHit, world, player);
 			RenderUtils.renderBlockOverlays(event, player, positions, 0.01f);
-		}
-		else
-		{
-			mouseOver = null;
 		}
 	}
 
@@ -70,12 +60,13 @@ public class BaseExtendo extends Item
 		player.addChatComponentMessage(new ChatComponentText(message));
 	}
 
-	private boolean used = false;
-
 	@Override
 	public ItemStack onItemRightClick(ItemStack itemStackIn, World worldIn, EntityPlayer playerIn)
 	{
 		if(worldIn.isRemote) return itemStackIn;
+
+		Minecraft minecraft = Minecraft.getMinecraft();
+		MovingObjectPosition mouseOver = minecraft.getRenderViewEntity().rayTrace(90.0, 1f);
 
 		// Make sure the target is a valid block
 		if(mouseOver == null)
@@ -115,15 +106,6 @@ public class BaseExtendo extends Item
 				playerIn.openContainer.detectAndSendChanges();
 			}
 		}
-		used = true;
 		return itemStackIn;
-	}
-
-	@Override
-	public ItemStack onItemUseFinish(ItemStack stack, World worldIn, EntityPlayer playerIn)
-	{
-		used = false;
-		sendMessage(EnumChatFormatting.AQUA + "wew lads", playerIn);
-		return stack;
 	}
 }

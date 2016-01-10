@@ -20,3 +20,5 @@ Currently, all of these are just ideas with no specific order or timeframe. Some
 - Lines/planes between two specified points (not player position)
 - More Shapes (like spheres)
 - Symmetry mode
+- Block replace
+- Distant mining

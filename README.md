@@ -11,6 +11,7 @@ Allows for line creation between selected point and player position. Useful for 
 ## Future Plans
 Currently, all of these are just ideas with no specific order or timeframe.
 - Sneak-click blocks to pick building material
+- Undo
 - Item durability (limited use options)
 - Config options (maximum distance, infinite durability, etc)
 - Plane creation

@@ -8,16 +8,16 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class HandyExtendo extends BaseExtendo
 {
-    public HandyExtendo()
-    {
-        setRegistryName("handyextendo");
-        setUnlocalizedName("handyextendo");
-        GameRegistry.registerItem(this);
-    }
+	public HandyExtendo()
+	{
+		setRegistryName("handyextendo");
+		setUnlocalizedName("handyextendo");
+		GameRegistry.registerItem(this);
+	}
 
-    @SideOnly(Side.CLIENT)
-    public void initModel()
-    {
-        ModelLoader.setCustomModelResourceLocation(this, 0, new ModelResourceLocation(getRegistryName(), "inventory"));
-    }
+	@SideOnly(Side.CLIENT)
+	public void initModel()
+	{
+		ModelLoader.setCustomModelResourceLocation(this, 0, new ModelResourceLocation(getRegistryName(), "inventory"));
+	}
 }

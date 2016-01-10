@@ -21,109 +21,109 @@ import java.util.Set;
 
 public class BaseExtendo extends Item
 {
-    private MovingObjectPosition mouseOver;
+	private MovingObjectPosition mouseOver;
 
-    @SideOnly(Side.CLIENT)
-    public void drawHighlight(RenderWorldLastEvent event, EntityPlayerSP player, ItemStack stack)
-    {
-        // Find whatever is under the cursor up to a certain distance away
-        Minecraft minecraft = Minecraft.getMinecraft();
-        mouseOver = minecraft.getRenderViewEntity().rayTrace(90.0, event.partialTicks);
-        if(mouseOver == null) return;
+	@SideOnly(Side.CLIENT)
+	public void drawHighlight(RenderWorldLastEvent event, EntityPlayerSP player, ItemStack stack)
+	{
+		// Find whatever is under the cursor up to a certain distance away
+		Minecraft minecraft = Minecraft.getMinecraft();
+		mouseOver = minecraft.getRenderViewEntity().rayTrace(90.0, event.partialTicks);
+		if(mouseOver == null) return;
 
-        // Get the block position and make sure it is a block
-        World world = player.worldObj;
-        BlockPos blockPos = mouseOver.getBlockPos();
-        if(blockPos == null)
-        {
-            mouseOver = null;
-            return;
-        }
+		// Get the block position and make sure it is a block
+		World world = player.worldObj;
+		BlockPos blockPos = mouseOver.getBlockPos();
+		if(blockPos == null)
+		{
+			mouseOver = null;
+			return;
+		}
 
-        IBlockState blockState = world.getBlockState(blockPos);
-        Block block = blockState.getBlock();
-        if(block != null && block.getMaterial() != Material.air)
-        {
-            Set<BlockPos> positions = actingBlocks(blockPos, mouseOver.sideHit, world, player);
-            RenderUtils.renderBlockOverlays(event, player, positions, 0.01f);
-        }
-        else
-        {
-            mouseOver = null;
-        }
-    }
+		IBlockState blockState = world.getBlockState(blockPos);
+		Block block = blockState.getBlock();
+		if(block != null && block.getMaterial() != Material.air)
+		{
+			Set<BlockPos> positions = actingBlocks(blockPos, mouseOver.sideHit, world, player);
+			RenderUtils.renderBlockOverlays(event, player, positions, 0.01f);
+		}
+		else
+		{
+			mouseOver = null;
+		}
+	}
 
-    protected Set<BlockPos> actingBlocks(BlockPos blockPos, EnumFacing sideHit, World world, EntityPlayer player)
-    {
-        Set<BlockPos> positions = new HashSet<BlockPos>();
-        BlockPos offsetPos = blockPos.offset(sideHit);
+	protected Set<BlockPos> actingBlocks(BlockPos blockPos, EnumFacing sideHit, World world, EntityPlayer player)
+	{
+		Set<BlockPos> positions = new HashSet<BlockPos>();
+		BlockPos offsetPos = blockPos.offset(sideHit);
 
-        IBlockState blockState = world.getBlockState(offsetPos);
-        Block block = blockState.getBlock();
+		IBlockState blockState = world.getBlockState(offsetPos);
+		Block block = blockState.getBlock();
 
-        if(block.getMaterial() == Material.air) positions.add(offsetPos);
-        return positions;
-    }
+		if(block.getMaterial() == Material.air) positions.add(offsetPos);
+		return positions;
+	}
 
-    protected void sendMessage(String message, EntityPlayer player)
-    {
-        player.addChatComponentMessage(new ChatComponentText(message));
-    }
+	protected void sendMessage(String message, EntityPlayer player)
+	{
+		player.addChatComponentMessage(new ChatComponentText(message));
+	}
 
-    private boolean used = false;
+	private boolean used = false;
 
-    @Override
-    public ItemStack onItemRightClick(ItemStack itemStackIn, World worldIn, EntityPlayer playerIn)
-    {
-        if(worldIn.isRemote) return itemStackIn;
+	@Override
+	public ItemStack onItemRightClick(ItemStack itemStackIn, World worldIn, EntityPlayer playerIn)
+	{
+		if(worldIn.isRemote) return itemStackIn;
 
-        // Make sure the target is a valid block
-        if(mouseOver == null)
-        {
-            sendMessage(EnumChatFormatting.AQUA + "No block targeted!", playerIn);
-            return itemStackIn;
-        }
-        BlockPos blockPos = mouseOver.getBlockPos();
-        if(blockPos == null)
-        {
-            sendMessage(EnumChatFormatting.AQUA + "No block targeted!", playerIn);
-            return itemStackIn;
-        }
-        IBlockState blockState = worldIn.getBlockState(blockPos);
-        Block block = blockState.getBlock();
-        if(block == null || block.getMaterial() == Material.air)
-        {
-            sendMessage(EnumChatFormatting.AQUA + "No block targeted!", playerIn);
-            return itemStackIn;
-        }
+		// Make sure the target is a valid block
+		if(mouseOver == null)
+		{
+			sendMessage(EnumChatFormatting.AQUA + "No block targeted!", playerIn);
+			return itemStackIn;
+		}
+		BlockPos blockPos = mouseOver.getBlockPos();
+		if(blockPos == null)
+		{
+			sendMessage(EnumChatFormatting.AQUA + "No block targeted!", playerIn);
+			return itemStackIn;
+		}
+		IBlockState blockState = worldIn.getBlockState(blockPos);
+		Block block = blockState.getBlock();
+		if(block == null || block.getMaterial() == Material.air)
+		{
+			sendMessage(EnumChatFormatting.AQUA + "No block targeted!", playerIn);
+			return itemStackIn;
+		}
 
-        // Place the necessary blocks
-        int meta = block.getMetaFromState(blockState);
-        Set<BlockPos> positions = actingBlocks(blockPos, mouseOver.sideHit, worldIn, playerIn);
-        for(BlockPos pos : positions)
-        {
-            if(!ItemUtils.useItemWithMeta(Item.getItemFromBlock(block), meta, playerIn.inventory, playerIn))
-            {
-                sendMessage(EnumChatFormatting.AQUA + "Building resource depleted!", playerIn);
-                break;
-            }
-            else
-            {
-                // todo - play sound
-                IBlockState state = block.getStateFromMeta(meta);
-                worldIn.setBlockState(pos, state, 2);
-                playerIn.openContainer.detectAndSendChanges();
-            }
-        }
-        used = true;
-        return itemStackIn;
-    }
+		// Place the necessary blocks
+		int meta = block.getMetaFromState(blockState);
+		Set<BlockPos> positions = actingBlocks(blockPos, mouseOver.sideHit, worldIn, playerIn);
+		for(BlockPos pos : positions)
+		{
+			if(!ItemUtils.useItemWithMeta(Item.getItemFromBlock(block), meta, playerIn.inventory, playerIn))
+			{
+				sendMessage(EnumChatFormatting.AQUA + "Building resource depleted!", playerIn);
+				break;
+			}
+			else
+			{
+				// todo - play sound
+				IBlockState state = block.getStateFromMeta(meta);
+				worldIn.setBlockState(pos, state, 2);
+				playerIn.openContainer.detectAndSendChanges();
+			}
+		}
+		used = true;
+		return itemStackIn;
+	}
 
-    @Override
-    public ItemStack onItemUseFinish(ItemStack stack, World worldIn, EntityPlayer playerIn)
-    {
-        used = false;
-        sendMessage(EnumChatFormatting.AQUA + "wew lads", playerIn);
-        return stack;
-    }
+	@Override
+	public ItemStack onItemUseFinish(ItemStack stack, World worldIn, EntityPlayer playerIn)
+	{
+		used = false;
+		sendMessage(EnumChatFormatting.AQUA + "wew lads", playerIn);
+		return stack;
+	}
 }

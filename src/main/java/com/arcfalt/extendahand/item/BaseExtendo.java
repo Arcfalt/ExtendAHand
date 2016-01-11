@@ -26,7 +26,8 @@ public class BaseExtendo extends Item
 	{
 		// Find whatever is under the cursor up to a certain distance away
 		Minecraft minecraft = Minecraft.getMinecraft();
-		MovingObjectPosition mouseOver = minecraft.getRenderViewEntity().rayTrace(90.0, event.partialTicks);
+		// Non-use of partial ticks intended to match up render area with placement area bound to tick
+		MovingObjectPosition mouseOver = minecraft.getRenderViewEntity().rayTrace(90.0, 1f);
 		if(mouseOver == null) return;
 
 		// Get the block position and make sure it is a block

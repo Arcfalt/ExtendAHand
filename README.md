@@ -5,14 +5,14 @@ A minecraft mod for 1.8.9 with the intent of extending the 'hand' of the player 
 Preview: http://webmshare.com/DAadM
 
 ## Items
+All extendos are able to select blocks in the world as their building resource by shift-clicking on them, and the building resource can be unselected by shift-clicking again on the same resource it has selected. If a resource is selected, the extendo will attempt to find that in your inventory and use it to build with, and if no resource is selected it will instead try to use whatever block your selection is touching. In creative mode, the extendos do not use inventory items up.
 ##### Handy Extendo
-This item allows for distant block creation.
+Allows for distant block creation.
 ##### Extended Extendo
 Allows for line creation between selected point and player position. Useful for creating walls and floors quickly.
 
 ## Future Plans
 Currently, all of these are just ideas with no specific order or timeframe. Some may be ready for release, some may be many versions later. I'm just noting them down so I don't forget any, and so you can get a rough idea of where the mod is headed in the future.
-- Sneak-click blocks to pick building material
 - Undo
 - Item durability (limited use options)
 - Config options (maximum distance, infinite durability, etc)

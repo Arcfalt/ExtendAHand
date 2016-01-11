@@ -43,15 +43,13 @@ public class BaseExtendo extends Item
 		}
 	}
 
+	/*
+	Find the blocks to act upon
+	Override this to return the desired blocks in child items
+	 */
 	protected Set<BlockPos> actingBlocks(BlockPos blockPos, EnumFacing sideHit, World world, EntityPlayer player)
 	{
 		Set<BlockPos> positions = new HashSet<BlockPos>();
-		BlockPos offsetPos = blockPos.offset(sideHit);
-
-		IBlockState blockState = world.getBlockState(offsetPos);
-		Block block = blockState.getBlock();
-
-		if(block.getMaterial() == Material.air) positions.add(offsetPos);
 		return positions;
 	}
 

@@ -3,6 +3,8 @@ package com.arcfalt.extendahand.utils;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 
 public class ItemUtils
 {
@@ -29,5 +31,14 @@ public class ItemUtils
 			inventory.mainInventory[i] = null;
 		}
 		return true;
+	}
+
+	public static NBTTagCompound getOrCreateTagCompound(ItemStack stack)
+	{
+		NBTTagCompound compound = stack.getTagCompound();
+		if(compound != null) return compound;
+		compound = new NBTTagCompound();
+		stack.setTagCompound(compound);
+		return compound;
 	}
 }

@@ -10,6 +10,7 @@ import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.*;
 import net.minecraft.world.World;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
@@ -106,5 +107,39 @@ public class BaseExtendo extends Item
 			}
 		}
 		return itemStackIn;
+	}
+
+	@Override
+	public boolean onItemUse(ItemStack stack, EntityPlayer playerIn, World worldIn, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ)
+	{
+		if(!playerIn.isSneaking()) return false;
+		if(pos == null) return false;
+		IBlockState blockState = worldIn.getBlockState(pos);
+		Block block = blockState.getBlock();
+		if(block == null || block.getMaterial() == Material.air) return false;
+		if(worldIn.isRemote) return true;
+
+		int blockId = Block.blockRegistry.getIDForObject(block);
+		int blockMeta = block.getMetaFromState(blockState);
+		NBTTagCompound tags = ItemUtils.getOrCreateTagCompound(stack);
+		if(tags.hasKey("extendoResource"))
+		{
+			NBTTagCompound existingTag = (NBTTagCompound)tags.getTag("extendoResource");
+			int existingId = existingTag.getInteger("block");
+			int existingMeta = existingTag.getInteger("meta");
+			if(existingId == blockId && existingMeta == blockMeta)
+			{
+				tags.removeTag("extendoResource");
+				sendMessage(EnumChatFormatting.LIGHT_PURPLE + "Building resource deselected!", playerIn);
+				return true;
+			}
+		}
+
+		NBTTagCompound resourceTag = new NBTTagCompound();
+		resourceTag.setInteger("block", blockId);
+		resourceTag.setInteger("meta", blockMeta);
+		tags.setTag("extendoResource", resourceTag);
+		sendMessage(EnumChatFormatting.AQUA + "Building resource selected!", playerIn);
+		return true;
 	}
 }

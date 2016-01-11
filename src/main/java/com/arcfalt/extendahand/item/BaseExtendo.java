@@ -102,12 +102,13 @@ public class BaseExtendo extends Item
 		}
 
 		// Place the necessary blocks
-		int meta = block.getMetaFromState(blockState);
 		IBlockState setState = getResourceState(itemStackIn, blockState);
+		Block useBlock = setState.getBlock();
+		int meta = useBlock.getMetaFromState(setState);
 		Set<BlockPos> positions = actingBlocks(blockPos, mouseOver.sideHit, worldIn, playerIn);
 		for(BlockPos pos : positions)
 		{
-			if(ItemUtils.useItemWithMeta(Item.getItemFromBlock(setState.getBlock()), meta, playerIn.inventory, playerIn))
+			if(ItemUtils.useItemWithMeta(Item.getItemFromBlock(useBlock), meta, playerIn.inventory, playerIn))
 			{
 				// todo - play sound
 				worldIn.setBlockState(pos, setState, 2);

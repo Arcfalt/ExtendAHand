@@ -60,6 +60,19 @@ public class BaseExtendo extends Item
 		player.addChatComponentMessage(new ChatComponentText(message));
 	}
 
+	public IBlockState getResourceState(ItemStack stack, IBlockState fallbackState)
+	{
+		NBTTagCompound tags = ItemUtils.getOrCreateTagCompound(stack);
+		if(!tags.hasKey("extendoResource")) return fallbackState;
+		NBTTagCompound eTag = (NBTTagCompound)tags.getTag("extendoResource");
+		if(!eTag.hasKey("block") || !eTag.hasKey("meta")) return fallbackState;
+		Block block = Block.blockRegistry.getObjectById(eTag.getInteger("block"));
+		if(block == null) return fallbackState;
+		IBlockState state = block.getStateFromMeta(eTag.getInteger("meta"));
+		if(state == null) return fallbackState;
+		return state;
+	}
+
 	@Override
 	public ItemStack onItemRightClick(ItemStack itemStackIn, World worldIn, EntityPlayer playerIn)
 	{
@@ -90,20 +103,20 @@ public class BaseExtendo extends Item
 
 		// Place the necessary blocks
 		int meta = block.getMetaFromState(blockState);
+		IBlockState setState = getResourceState(itemStackIn, blockState);
 		Set<BlockPos> positions = actingBlocks(blockPos, mouseOver.sideHit, worldIn, playerIn);
 		for(BlockPos pos : positions)
 		{
-			if(!ItemUtils.useItemWithMeta(Item.getItemFromBlock(block), meta, playerIn.inventory, playerIn))
+			if(ItemUtils.useItemWithMeta(Item.getItemFromBlock(setState.getBlock()), meta, playerIn.inventory, playerIn))
 			{
-				sendMessage(EnumChatFormatting.AQUA + "Building resource depleted!", playerIn);
-				break;
+				// todo - play sound
+				worldIn.setBlockState(pos, setState, 2);
+				playerIn.openContainer.detectAndSendChanges();
 			}
 			else
 			{
-				// todo - play sound
-				IBlockState state = block.getStateFromMeta(meta);
-				worldIn.setBlockState(pos, state, 2);
-				playerIn.openContainer.detectAndSendChanges();
+				sendMessage(EnumChatFormatting.AQUA + "Building resource depleted!", playerIn);
+				break;
 			}
 		}
 		return itemStackIn;

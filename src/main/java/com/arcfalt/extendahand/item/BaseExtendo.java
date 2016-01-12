@@ -100,6 +100,7 @@ public class BaseExtendo extends Item
 			sendMessage(EnumChatFormatting.AQUA + "No block targeted!", playerIn);
 			return itemStackIn;
 		}
+		worldIn.playSoundAtEntity(playerIn, "random.bow", 0.5F, 0.4F / (itemRand.nextFloat() * 0.4F + 0.8F));
 
 		// Place the necessary blocks
 		IBlockState setState = getResourceState(itemStackIn, blockState);
@@ -110,7 +111,6 @@ public class BaseExtendo extends Item
 		{
 			if(ItemUtils.useItemWithMeta(Item.getItemFromBlock(useBlock), meta, playerIn.inventory, playerIn))
 			{
-				// todo - play sound
 				worldIn.setBlockState(pos, setState, 2);
 				playerIn.openContainer.detectAndSendChanges();
 			}

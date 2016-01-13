@@ -3,6 +3,7 @@
 A minecraft mod for 1.8.9 with the intent of extending the 'hand' of the player in building. So far, this mod mainly focuses on allowing for distant block placement, and the creation of lines from distant points to the player's position, simply pulling from the player's inventory. More building functionality is planned to come in future versions.
 
 Preview: http://webmshare.com/DAadM
+
 CurseForge Link: http://minecraft.curseforge.com/projects/extend-a-hand
 
 ## Items

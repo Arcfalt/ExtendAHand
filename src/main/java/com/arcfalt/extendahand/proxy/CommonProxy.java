@@ -10,7 +10,6 @@ public class CommonProxy
 	public void preInit(FMLPreInitializationEvent e)
 	{
 		ModItems.init();
-		ModItems.initModels();
 	}
 
 	public void init(FMLInitializationEvent e)

@@ -23,6 +23,7 @@ public class ExtendedExtendo extends BaseExtendo
 	{
 		setRegistryName("extendedextendo");
 		setUnlocalizedName("extendedextendo");
+		setMaxStackSize(1);
 		GameRegistry.registerItem(this);
 	}
 

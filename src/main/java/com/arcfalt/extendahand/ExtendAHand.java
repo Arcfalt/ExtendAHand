@@ -20,7 +20,7 @@ public class ExtendAHand
 
 	public static final String MODID = "ExtendAHand";
 	public static final String MODNAME = "Extend-A-Hand";
-	public static final String VERSION = "0.1";
+	public static final String VERSION = "0.2";
 
 	@SidedProxy(clientSide = "com.arcfalt.extendahand.proxy.ClientProxy", serverSide = "com.arcfalt.extendahand.proxy.ServerProxy")
 	public static CommonProxy proxy;

@@ -2,6 +2,7 @@ package com.arcfalt.extendahand;
 
 import com.arcfalt.extendahand.item.ExtendedExtendo;
 import com.arcfalt.extendahand.item.HandyExtendo;
+import com.arcfalt.extendahand.tabs.ModTabs;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
@@ -18,6 +19,12 @@ public class ModItems
 	{
 		handyExtendo = new HandyExtendo();
 		extendedExtendo = new ExtendedExtendo();
+	}
+
+	public static void initTabs()
+	{
+		handyExtendo.setCreativeTab(ModTabs.mainTab);
+		extendedExtendo.setCreativeTab(ModTabs.mainTab);
 	}
 
 	@SideOnly(Side.CLIENT)

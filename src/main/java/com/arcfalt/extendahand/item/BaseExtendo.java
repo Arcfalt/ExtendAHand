@@ -1,5 +1,6 @@
 package com.arcfalt.extendahand.item;
 
+import com.arcfalt.extendahand.packet.PacketHandler;
 import com.arcfalt.extendahand.utils.ItemUtils;
 import com.arcfalt.extendahand.utils.RenderUtils;
 import net.minecraft.block.Block;
@@ -76,7 +77,7 @@ public class BaseExtendo extends Item
 	@Override
 	public ItemStack onItemRightClick(ItemStack itemStackIn, World worldIn, EntityPlayer playerIn)
 	{
-		if(worldIn.isRemote) return itemStackIn;
+		if(!worldIn.isRemote) return itemStackIn;
 
 		Minecraft minecraft = Minecraft.getMinecraft();
 		MovingObjectPosition mouseOver = minecraft.getRenderViewEntity().rayTrace(90.0, 1f);
@@ -102,24 +103,14 @@ public class BaseExtendo extends Item
 		}
 		worldIn.playSoundAtEntity(playerIn, "random.bow", 0.5F, 0.4F / (itemRand.nextFloat() * 0.4F + 0.8F));
 
-		// Place the necessary blocks
+		// Get necessary block data
 		IBlockState setState = getResourceState(itemStackIn, blockState);
 		Block useBlock = setState.getBlock();
 		int meta = useBlock.getMetaFromState(setState);
 		Set<BlockPos> positions = actingBlocks(blockPos, mouseOver.sideHit, worldIn, playerIn);
-		for(BlockPos pos : positions)
-		{
-			if(ItemUtils.useItemWithMeta(Item.getItemFromBlock(useBlock), meta, playerIn.inventory, playerIn))
-			{
-				worldIn.setBlockState(pos, setState, 2);
-				playerIn.openContainer.detectAndSendChanges();
-			}
-			else
-			{
-				sendMessage(EnumChatFormatting.AQUA + "Building resource depleted!", playerIn);
-				break;
-			}
-		}
+
+		// Send placement packet
+		PacketHandler.sendExtendoPlacement(useBlock, meta, positions);
 		return itemStackIn;
 	}
 

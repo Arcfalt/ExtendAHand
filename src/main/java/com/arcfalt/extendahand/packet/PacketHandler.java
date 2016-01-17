@@ -1,6 +1,8 @@
 package com.arcfalt.extendahand.packet;
 
 import net.minecraft.block.Block;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.BlockPos;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
@@ -16,11 +18,18 @@ public class PacketHandler
 	public static void registerPackets()
 	{
 		INSTANCE.registerMessage(ExtendoPlaceHandler.class, ExtendoPlaceMessage.class, 0, Side.SERVER);
+		INSTANCE.registerMessage(ExtendoNBTHandler.class, ExtendoNBTMessage.class, 1, Side.SERVER);
 	}
 
 	@SideOnly(Side.CLIENT)
 	public static void sendExtendoPlacement(Block block, int meta, Set<BlockPos> positions)
 	{
 		INSTANCE.sendToServer(new ExtendoPlaceMessage(block, meta, positions));
+	}
+
+	@SideOnly(Side.CLIENT)
+	public static void sendExtendoNBT(ItemStack stack, NBTTagCompound tags)
+	{
+		INSTANCE.sendToServer(new ExtendoNBTMessage(stack, tags));
 	}
 }

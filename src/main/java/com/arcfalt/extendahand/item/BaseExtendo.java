@@ -34,7 +34,7 @@ public class BaseExtendo extends Item
 		BlockPos blockPos = getTargetBlockPos(player, mouseOver);
 		if(blockPos == null) return;
 		Set<BlockPos> positions = actingBlocks(blockPos, mouseOver.sideHit, player.worldObj, player);
-		RenderUtils.renderBlockOverlays(event, player, positions, 1f, .3f, 1f);
+		RenderUtils.renderBlockOverlays(event, player, positions, 1f, .3f, 1f, 0.001f);
 	}
 
 	/*

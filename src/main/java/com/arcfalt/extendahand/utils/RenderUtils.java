@@ -14,7 +14,7 @@ import java.util.Set;
 
 public class RenderUtils
 {
-	public static void renderBlockOverlays(RenderWorldLastEvent event, EntityPlayerSP player, Set<BlockPos> positions, float r, float g, float b)
+	public static void renderBlockOverlays(RenderWorldLastEvent event, EntityPlayerSP player, Set<BlockPos> positions, float r, float g, float b, float offset)
 	{
 		if(positions == null || positions.size() == 0) return;
 
@@ -30,9 +30,14 @@ public class RenderUtils
 		GlStateManager.pushMatrix();
 		GlStateManager.translate(-doubleX, -doubleY, -doubleZ);
 
-		renderCubes(positions, 0.001f, r, g, b, .8f);
+		renderCubes(positions, offset, r, g, b, .8f);
 		GlStateManager.disableBlend();
-		renderOutlines(positions, 1.5f, 0.002f, 0f, 0f, 0f, 1f);
+		renderOutlines(positions, 1.5f, offset + 0.001f, 0f, 0f, 0f, 1f);
+
+		// get around vanilla minecraft opengl bug by resetting attribs pre-pop
+		GlStateManager.enableTexture2D();
+		GlStateManager.enableLighting();
+		GlStateManager.color(1f, 1f, 1f, 1f);
 
 		GlStateManager.popMatrix();
 		GlStateManager.popAttrib();

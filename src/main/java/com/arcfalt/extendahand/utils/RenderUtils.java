@@ -14,7 +14,7 @@ import java.util.Set;
 
 public class RenderUtils
 {
-	public static void renderBlockOverlays(RenderWorldLastEvent event, EntityPlayerSP player, Set<BlockPos> positions, float sizeOffset)
+	public static void renderBlockOverlays(RenderWorldLastEvent event, EntityPlayerSP player, Set<BlockPos> positions, float r, float g, float b)
 	{
 		if(positions == null || positions.size() == 0) return;
 
@@ -30,22 +30,21 @@ public class RenderUtils
 		GlStateManager.pushMatrix();
 		GlStateManager.translate(-doubleX, -doubleY, -doubleZ);
 
-		renderCubes(positions, sizeOffset);
+		renderCubes(positions, 0.001f, r, g, b, .8f);
 		GlStateManager.disableBlend();
-		renderOutlines(positions, 1f, 0f, 1f, 1.5f, sizeOffset);
+		renderOutlines(positions, 1.5f, 0.002f, 0f, 0f, 0f, 1f);
 
 		GlStateManager.popMatrix();
 		GlStateManager.popAttrib();
 	}
 
-	private static void renderCubes(Set<BlockPos> positions, float offset)
+	private static void renderCubes(Set<BlockPos> positions, float offset, float r, float g, float b, float a)
 	{
 		RenderHelper.enableStandardItemLighting();
 		Tessellator t = Tessellator.getInstance();
 		WorldRenderer renderer = t.getWorldRenderer();
-		renderer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR);
-
-		GlStateManager.color(1f, 1f, 1f, 1f);
+		renderer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION);
+		GlStateManager.color(r, g, b, a);
 		for(BlockPos coordinate : positions)
 		{
 			float x = coordinate.getX();
@@ -66,73 +65,50 @@ public class RenderUtils
 		z = z - o;
 		o = 1f + (o * 2f);
 
-		// alpha
-		float a = .8f;
-
-		// front and back color
-		float r1 = 1f;
-		float g1 = .3f;
-		float b1 = 1f;
-
-		// left and right color
-		float r2 = 1f;
-		float g2 = .15f;
-		float b2 = 1f;
-
-		// top color
-		float r3 = 1f;
-		float g3 = .45f;
-		float b3 = 1f;
-
-		// bottom color
-		float r4 = 1f;
-		float g4 = 0f;
-		float b4 = 1f;
-
 		// front
-		renderer.pos(x + o, y + o, z + o).color(r1, g1, b1, a).endVertex();
-		renderer.pos(x, y + o, z + o).color(r1, g1, b1, a).endVertex();
-		renderer.pos(x, y, z + o).color(r1, g1, b1, a).endVertex();
-		renderer.pos(x + o, y, z + o).color(r1, g1, b1, a).endVertex();
+		renderer.pos(x + o, y + o, z + o).endVertex();
+		renderer.pos(x, y + o, z + o).endVertex();
+		renderer.pos(x, y, z + o).endVertex();
+		renderer.pos(x + o, y, z + o).endVertex();
 
 		// back
-		renderer.pos(x, y, z).color(r1, g1, b1, a).endVertex();
-		renderer.pos(x, y + o, z).color(r1, g1, b1, a).endVertex();
-		renderer.pos(x + o, y + o, z).color(r1, g1, b1, a).endVertex();
-		renderer.pos(x + o, y, z).color(r1, g1, b1, a).endVertex();
+		renderer.pos(x, y, z).endVertex();
+		renderer.pos(x, y + o, z).endVertex();
+		renderer.pos(x + o, y + o, z).endVertex();
+		renderer.pos(x + o, y, z).endVertex();
 
 		// left
-		renderer.pos(x, y + o, z + o).color(r2, g2, b2, a).endVertex();
-		renderer.pos(x, y + o, z).color(r2, g2, b2, a).endVertex();
-		renderer.pos(x, y, z).color(r2, g2, b2, a).endVertex();
-		renderer.pos(x, y, z + o).color(r2, g2, b2, a).endVertex();
+		renderer.pos(x, y + o, z + o).endVertex();
+		renderer.pos(x, y + o, z).endVertex();
+		renderer.pos(x, y, z).endVertex();
+		renderer.pos(x, y, z + o).endVertex();
 
 		// right
-		renderer.pos(x + o, y, z).color(r2, g2, b2, a).endVertex();
-		renderer.pos(x + o, y + o, z).color(r2, g2, b2, a).endVertex();
-		renderer.pos(x + o, y + o, z + o).color(r2, g2, b2, a).endVertex();
-		renderer.pos(x + o, y, z + o).color(r2, g2, b2, a).endVertex();
+		renderer.pos(x + o, y, z).endVertex();
+		renderer.pos(x + o, y + o, z).endVertex();
+		renderer.pos(x + o, y + o, z + o).endVertex();
+		renderer.pos(x + o, y, z + o).endVertex();
 
 		// top
-		renderer.pos(x, y + o, z).color(r3, g3, b3, a).endVertex();
-		renderer.pos(x, y + o, z + o).color(r3, g3, b3, a).endVertex();
-		renderer.pos(x + o, y + o, z + o).color(r3, g3, b3, a).endVertex();
-		renderer.pos(x + o, y + o, z).color(r3, g3, b3, a).endVertex();
+		renderer.pos(x, y + o, z).endVertex();
+		renderer.pos(x, y + o, z + o).endVertex();
+		renderer.pos(x + o, y + o, z + o).endVertex();
+		renderer.pos(x + o, y + o, z).endVertex();
 
 		// bottom
-		renderer.pos(x + o, y, z + o).color(r4, g4, b4, a).endVertex();
-		renderer.pos(x, y, z + o).color(r4, g4, b4, a).endVertex();
-		renderer.pos(x, y, z).color(r4, g4, b4, a).endVertex();
-		renderer.pos(x + o, y, z).color(r4, g4, b4, a).endVertex();
+		renderer.pos(x + o, y, z + o).endVertex();
+		renderer.pos(x, y, z + o).endVertex();
+		renderer.pos(x, y, z).endVertex();
+		renderer.pos(x + o, y, z).endVertex();
 	}
 
-	private static void renderOutlines(Set<BlockPos> positions, float r, float g, float b, float thickness, float offset)
+	private static void renderOutlines(Set<BlockPos> positions, float thickness, float offset, float r, float g, float b, float a)
 	{
 		RenderHelper.enableStandardItemLighting();
 		Tessellator tessellator = Tessellator.getInstance();
 		WorldRenderer worldRenderer = tessellator.getWorldRenderer();
 		worldRenderer.begin(GL11.GL_LINES, DefaultVertexFormats.POSITION);
-		GlStateManager.color(r, g, b, 1f);
+		GlStateManager.color(r, g, b, a);
 		GL11.glLineWidth(thickness);
 
 		for(BlockPos coordinate : positions)

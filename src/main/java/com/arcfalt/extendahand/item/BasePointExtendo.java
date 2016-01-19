@@ -32,7 +32,10 @@ public class BasePointExtendo extends BaseExtendo
 	@SideOnly(Side.CLIENT)
 	public void drawHighlight(RenderWorldLastEvent event, EntityPlayerSP player, ItemStack stack)
 	{
-		super.drawHighlight(event, player, stack);
+		MovingObjectPosition mouseOver = getMouseOver();
+		BlockPos blockPos = getTargetBlockPos(player, mouseOver);
+		Set<BlockPos> actingBlocks = actingBlocks(blockPos, mouseOver.sideHit, player.worldObj, player);
+		RenderUtils.renderBlockOverlays(event, player, actingBlocks, 1f, .8f, 1f, 0.001f);
 		float targetOffset = 0.006f;
 
 		// Draw existing selected points
@@ -53,8 +56,6 @@ public class BasePointExtendo extends BaseExtendo
 		}
 
 		// Find mouseover object
-		MovingObjectPosition mouseOver = getMouseOver();
-		BlockPos blockPos = getTargetBlockPos(player, mouseOver);
 		if(blockPos == null) return;
 
 		// Draw mouseover point placement

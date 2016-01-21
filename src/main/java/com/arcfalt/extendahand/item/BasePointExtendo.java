@@ -91,6 +91,18 @@ public class BasePointExtendo extends BaseExtendo
 		}
 		IBlockState blockState = worldIn.getBlockState(blockPos);
 		Block block = blockState.getBlock();
+
+		NBTTagCompound gotTags = itemStackIn.getTagCompound();
+		if(playerIn.isSneaking() && gotTags != null && gotTags.hasKey(LOC + 0) && gotTags.hasKey(LOC + 1))
+		{
+			IBlockState setState = getResourceState(itemStackIn, blockState);
+			Block useBlock = setState.getBlock();
+			int meta = useBlock.getMetaFromState(setState);
+			Set<BlockPos> positions = actingBlocks(blockPos, mouseOver.sideHit, playerIn.worldObj, playerIn);
+			PacketHandler.sendExtendoPlacement(useBlock, meta, positions);
+			return itemStackIn;
+		}
+
 		if(block == null || block.getMaterial() == Material.air)
 		{
 			sendMessage(EnumChatFormatting.AQUA + "No block targeted!", playerIn);
@@ -98,7 +110,6 @@ public class BasePointExtendo extends BaseExtendo
 		}
 		worldIn.playSoundAtEntity(playerIn, "random.bow", 0.5F, 0.4F / (itemRand.nextFloat() * 0.4F + 0.8F));
 
-		NBTTagCompound gotTags = itemStackIn.getTagCompound();
 		NBTTagCompound tags;
 
 		if(gotTags == null) tags = new NBTTagCompound();

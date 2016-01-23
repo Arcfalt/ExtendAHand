@@ -1,5 +1,6 @@
 package com.arcfalt.extendahand.item;
 
+import com.arcfalt.extendahand.config.Config;
 import com.arcfalt.extendahand.packet.PacketHandler;
 import com.arcfalt.extendahand.utils.ItemUtils;
 import com.arcfalt.extendahand.utils.RenderUtils;
@@ -24,6 +25,22 @@ import java.util.Set;
 public class BaseExtendo extends Item
 {
 	/*
+	Get the maximum amount of blocks this tool can place in a single action
+	 */
+	public int getMaxBlocks()
+	{
+		return 1;
+	}
+
+	/*
+	Get the maximum block distance this tool can reach away
+	 */
+	public double getMaxDistance()
+	{
+		return Config.baseMaxDistance;
+	}
+
+	/*
 	Draw the highlight effect over the area selected by the actingBlocks function
 	Called by subscription event from render last
 	 */
@@ -33,7 +50,7 @@ public class BaseExtendo extends Item
 		MovingObjectPosition mouseOver = getMouseOver();
 		BlockPos blockPos = getTargetBlockPos(player, mouseOver);
 		if(blockPos == null) return;
-		Set<BlockPos> positions = actingBlocks(blockPos, mouseOver.sideHit, player.worldObj, player);
+		Set<BlockPos> positions = actingBlocks(blockPos, mouseOver.sideHit, player.worldObj, player, false);
 		RenderUtils.renderBlockOverlays(event, player, positions, 1f, .3f, 1f, 0.001f);
 	}
 
@@ -44,7 +61,7 @@ public class BaseExtendo extends Item
 	protected MovingObjectPosition getMouseOver()
 	{
 		// Non-use of partial ticks intended to match up render area with placement area bound to tick
-		return Minecraft.getMinecraft().getRenderViewEntity().rayTrace(90.0, 1f);
+		return Minecraft.getMinecraft().getRenderViewEntity().rayTrace(getMaxDistance(), 1f);
 	}
 
 	/*
@@ -82,7 +99,7 @@ public class BaseExtendo extends Item
 	Find the blocks to act upon
 	Override this to return the desired blocks in child items
 	 */
-	protected Set<BlockPos> actingBlocks(BlockPos blockPos, EnumFacing sideHit, World world, EntityPlayer player)
+	protected Set<BlockPos> actingBlocks(BlockPos blockPos, EnumFacing sideHit, World world, EntityPlayer player, boolean trimAmount)
 	{
 		Set<BlockPos> positions = new HashSet<BlockPos>();
 		return positions;
@@ -148,7 +165,7 @@ public class BaseExtendo extends Item
 		IBlockState setState = getResourceState(itemStackIn, blockState);
 		Block useBlock = setState.getBlock();
 		int meta = useBlock.getMetaFromState(setState);
-		Set<BlockPos> positions = actingBlocks(blockPos, mouseOver.sideHit, worldIn, playerIn);
+		Set<BlockPos> positions = actingBlocks(blockPos, mouseOver.sideHit, worldIn, playerIn, true);
 
 		// Send placement packet
 		PacketHandler.sendExtendoPlacement(useBlock, meta, positions);

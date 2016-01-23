@@ -1,5 +1,6 @@
 package com.arcfalt.extendahand.item;
 
+import com.arcfalt.extendahand.config.Config;
 import com.arcfalt.extendahand.utils.ItemUtils;
 import com.arcfalt.extendahand.utils.RenderUtils;
 import net.minecraft.block.Block;
@@ -32,6 +33,18 @@ public class PlanarExtendo extends BasePointExtendo
 		GameRegistry.registerItem(this);
 	}
 
+	@Override
+	public int getMaxBlocks()
+	{
+		return Config.boxMaxBlocks;
+	}
+
+	@Override
+	public double getMaxDistance()
+	{
+		return Config.boxMaxDistance;
+	}
+
 	@SideOnly(Side.CLIENT)
 	public void initModel()
 	{
@@ -39,7 +52,7 @@ public class PlanarExtendo extends BasePointExtendo
 	}
 
 	@Override
-	protected Set<BlockPos> actingBlocks(BlockPos blockPos, EnumFacing sideHit, World world, EntityPlayer player)
+	protected Set<BlockPos> actingBlocks(BlockPos blockPos, EnumFacing sideHit, World world, EntityPlayer player, boolean trimAmount)
 	{
 		Set<BlockPos> positions = new HashSet<BlockPos>();
 
@@ -54,6 +67,9 @@ public class PlanarExtendo extends BasePointExtendo
 		Vec3i minLoc = new Vec3i(Math.min(locA.getX(), locB.getX()), Math.min(locA.getY(), locB.getY()), Math.min(locA.getZ(), locB.getZ()));
 		Vec3i maxLoc = new Vec3i(Math.max(locA.getX(), locB.getX()), Math.max(locA.getY(), locB.getY()), Math.max(locA.getZ(), locB.getZ()));
 
+		int amount = 0;
+		int maxBlocks = getMaxBlocks();
+
 		// Todo - Optimize this, currently using an inefficient algorithm because I made it while tired
 		for(int x = minLoc.getX(); x <= maxLoc.getX(); x++)
 		{
@@ -66,7 +82,16 @@ public class PlanarExtendo extends BasePointExtendo
 						BlockPos acting = new BlockPos(x, y, z);
 						IBlockState blockState = world.getBlockState(acting);
 						Block block = blockState.getBlock();
-						if(block.getMaterial() == Material.air) positions.add(acting);
+						if(block.getMaterial() == Material.air)
+						{
+							amount += 1;
+							if(amount > maxBlocks && trimAmount)
+							{
+								sendMessage("Maximum limit of " + maxBlocks + " blocks created!", player);
+								return positions;
+							}
+							positions.add(acting);
+						}
 					}
 				}
 			}

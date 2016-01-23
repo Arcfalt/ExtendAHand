@@ -1,5 +1,6 @@
 package com.arcfalt.extendahand;
 
+import com.arcfalt.extendahand.config.Config;
 import com.arcfalt.extendahand.item.ExtendedExtendo;
 import com.arcfalt.extendahand.item.HandyExtendo;
 import com.arcfalt.extendahand.item.PlanarExtendo;
@@ -43,8 +44,17 @@ public class ModItems
 
 	public static void initCrafting()
 	{
-		GameRegistry.addRecipe(new ItemStack(handyExtendo), ".P.", "IDI", ".S.", 'I', Items.ender_pearl, 'D', Items.diamond, 'P', Blocks.piston, 'S', Blocks.sticky_piston);
-		GameRegistry.addRecipe(new ItemStack(extendedExtendo), "BPB", "IEI", "BSB", 'I', Items.ender_eye, 'E', handyExtendo, 'B', Items.blaze_rod, 'P', Blocks.piston, 'S', Blocks.sticky_piston);
-		GameRegistry.addRecipe(new ItemStack(planarExtendo), "BPB", "IEI", "QSW", 'I', Items.ender_eye, 'E', handyExtendo, 'B', Items.ghast_tear, 'P', Blocks.piston, 'S', Blocks.sticky_piston, 'Q', new ItemStack(Items.potionitem, 1, 8193), 'W', new ItemStack(Items.potionitem, 1, 8203));
+		if(!Config.baseCreativeOnly)
+		{
+			GameRegistry.addRecipe(new ItemStack(handyExtendo), ".P.", "IDI", ".P.", 'I', Items.ender_pearl, 'D', Items.diamond, 'P', Blocks.piston);
+		}
+		if(!Config.lineCreativeOnly)
+		{
+			GameRegistry.addRecipe(new ItemStack(extendedExtendo), "BPB", "IEI", "BSB", 'I', Items.ender_eye, 'E', handyExtendo, 'B', Items.blaze_rod, 'P', Blocks.piston, 'S', Blocks.sticky_piston);
+		}
+		if(!Config.boxCreativeOnly)
+		{
+			GameRegistry.addRecipe(new ItemStack(planarExtendo), "BSB", "IEI", "WSW", 'I', Items.ender_eye, 'E', handyExtendo, 'B', Items.ghast_tear, 'S', Blocks.sticky_piston, 'W', new ItemStack(Items.potionitem, 1, 8203));
+		}
 	}
 }

@@ -1,5 +1,6 @@
 package com.arcfalt.extendahand.item;
 
+import com.arcfalt.extendahand.config.Config;
 import com.arcfalt.extendahand.packet.PacketHandler;
 import com.arcfalt.extendahand.utils.ItemUtils;
 import com.arcfalt.extendahand.utils.RenderUtils;
@@ -29,12 +30,24 @@ public class BasePointExtendo extends BaseExtendo
 	static final String LOC_NEXT = "extendoLocNext";
 
 	@Override
+	public int getMaxBlocks()
+	{
+		return Config.boxMaxBlocks;
+	}
+
+	@Override
+	public double getMaxDistance()
+	{
+		return Config.boxMaxDistance;
+	}
+
+	@Override
 	@SideOnly(Side.CLIENT)
 	public void drawHighlight(RenderWorldLastEvent event, EntityPlayerSP player, ItemStack stack)
 	{
 		MovingObjectPosition mouseOver = getMouseOver();
 		BlockPos blockPos = getTargetBlockPos(player, mouseOver);
-		Set<BlockPos> actingBlocks = actingBlocks(blockPos, mouseOver.sideHit, player.worldObj, player);
+		Set<BlockPos> actingBlocks = actingBlocks(blockPos, mouseOver.sideHit, player.worldObj, player, false);
 		RenderUtils.renderBlockOverlays(event, player, actingBlocks, 1f, .8f, 1f, 0.001f);
 		float targetOffset = 0.006f;
 
@@ -98,7 +111,7 @@ public class BasePointExtendo extends BaseExtendo
 			IBlockState setState = getResourceState(itemStackIn, blockState);
 			Block useBlock = setState.getBlock();
 			int meta = useBlock.getMetaFromState(setState);
-			Set<BlockPos> positions = actingBlocks(blockPos, mouseOver.sideHit, playerIn.worldObj, playerIn);
+			Set<BlockPos> positions = actingBlocks(blockPos, mouseOver.sideHit, playerIn.worldObj, playerIn, true);
 			PacketHandler.sendExtendoPlacement(useBlock, meta, positions);
 			return itemStackIn;
 		}
@@ -123,19 +136,7 @@ public class BasePointExtendo extends BaseExtendo
 		}
 		tags.setLong(LOC + placeIn, blockPos.toLong());
 		tags.setInteger(LOC_NEXT, 1 - placeIn);
-		//tags.
 		PacketHandler.sendExtendoNBT(itemStackIn, tags);
-
-		/*
-		// Get necessary block data
-		IBlockState setState = getResourceState(itemStackIn, blockState);
-		Block useBlock = setState.getBlock();
-		int meta = useBlock.getMetaFromState(setState);
-		Set<BlockPos> positions = actingBlocks(blockPos, mouseOver.sideHit, worldIn, playerIn);
-
-		// Send placement packet
-		PacketHandler.sendExtendoPlacement(useBlock, meta, positions);
-		*/
 		return itemStackIn;
 	}
 }

@@ -1,5 +1,6 @@
 package com.arcfalt.extendahand.item;
 
+import com.arcfalt.extendahand.config.Config;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -27,6 +28,18 @@ public class ExtendedExtendo extends BaseExtendo
 		GameRegistry.registerItem(this);
 	}
 
+	@Override
+	public int getMaxBlocks()
+	{
+		return Config.lineMaxBlocks;
+	}
+
+	@Override
+	public double getMaxDistance()
+	{
+		return Config.lineMaxDistance;
+	}
+
 	@SideOnly(Side.CLIENT)
 	public void initModel()
 	{
@@ -34,7 +47,7 @@ public class ExtendedExtendo extends BaseExtendo
 	}
 
 	@Override
-	protected Set<BlockPos> actingBlocks(BlockPos blockPos, EnumFacing sideHit, World world, EntityPlayer player)
+	protected Set<BlockPos> actingBlocks(BlockPos blockPos, EnumFacing sideHit, World world, EntityPlayer player, boolean trimAmount)
 	{
 		Set<BlockPos> positions = new HashSet<BlockPos>();
 

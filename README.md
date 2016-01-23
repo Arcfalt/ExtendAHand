@@ -12,14 +12,13 @@ All extendos are able to select blocks in the world as their building resource b
 Allows for distant block creation.
 ##### Extended Extendo
 Allows for line creation between selected point and player position. Useful for creating walls and floors quickly.
+##### Planar Extendo
+Allows for hollow box creation between two selected points. Useful for quickly creating entire rooms. Simply select two points, then hold shift and click one of the selected points again to build the box.
 
 ## Future Plans
 Currently, all of these are just ideas with no specific order or timeframe. Some may be ready for release, some may be many versions later. I'm just noting them down so I don't forget any, and so you can get a rough idea of where the mod is headed in the future.
 - Undo
 - Item durability (limited use options)
-- Config options (maximum distance, infinite durability, etc)
-- Plane creation
-- Lines/planes between two specified points (not player position)
 - More Shapes (like spheres)
 - Symmetry mode
 - Block replace

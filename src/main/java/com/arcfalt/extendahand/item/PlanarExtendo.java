@@ -30,6 +30,10 @@ public class PlanarExtendo extends BasePointExtendo
 		setRegistryName("planarextendo");
 		setUnlocalizedName("planarextendo");
 		setMaxStackSize(1);
+		if(Config.boxDurability > 0)
+		{
+			setMaxDamage(Config.boxDurability);
+		}
 		GameRegistry.registerItem(this);
 	}
 
@@ -87,6 +91,7 @@ public class PlanarExtendo extends BasePointExtendo
 							amount += 1;
 							if(amount > maxBlocks && trimAmount)
 							{
+								if(stack.isItemStackDamageable() && stack.getItemDamage() >= stack.getMaxDamage()) return positions;
 								sendMessage("Maximum limit of " + maxBlocks + " blocks created!", player);
 								return positions;
 							}

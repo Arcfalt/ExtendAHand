@@ -10,6 +10,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -207,5 +208,12 @@ public class BaseExtendo extends Item
 		tags.setTag("extendoResource", resourceTag);
 		sendMessage(EnumChatFormatting.AQUA + "Building resource selected!", playerIn);
 		return true;
+	}
+
+	@Override
+	public boolean getIsRepairable(ItemStack toRepair, ItemStack repair)
+	{
+		if(!isDamageable()) return super.getIsRepairable(toRepair, repair);
+		return repair.getItem() == Items.ender_pearl || repair.getItem() == Items.ender_eye || super.getIsRepairable(toRepair, repair);
 	}
 }

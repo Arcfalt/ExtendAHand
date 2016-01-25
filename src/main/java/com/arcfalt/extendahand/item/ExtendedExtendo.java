@@ -25,6 +25,10 @@ public class ExtendedExtendo extends BaseExtendo
 		setRegistryName("extendedextendo");
 		setUnlocalizedName("extendedextendo");
 		setMaxStackSize(1);
+		if(Config.lineDurability > 0)
+		{
+			setMaxDamage(Config.lineDurability);
+		}
 		GameRegistry.registerItem(this);
 	}
 

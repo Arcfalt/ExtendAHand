@@ -39,6 +39,13 @@ public class ExtendoPlaceHandler implements IMessageHandler<ExtendoPlaceMessage,
 				if(!(heldItem instanceof BaseExtendo)) return;
 				BaseExtendo extendo = (BaseExtendo)heldItem;
 
+				if(heldStack.isItemStackDamageable() && heldStack.getItemDamage() >= heldStack.getMaxDamage())
+				{
+					String message = EnumChatFormatting.RED + "Item is too damaged to use!";
+					player.addChatComponentMessage(new ChatComponentText(message));
+					return;
+				}
+
 				int maxBlocks = extendo.getMaxBlocks();
 				int placedBlocks = 0;
 
@@ -62,6 +69,13 @@ public class ExtendoPlaceHandler implements IMessageHandler<ExtendoPlaceMessage,
 						player.addChatComponentMessage(new ChatComponentText(message));
 						break;
 					}
+				}
+
+				if(heldStack.isItemStackDamageable())
+				{
+					int newDamage = Math.min(heldStack.getItemDamage() + placedBlocks, heldStack.getMaxDamage());
+					heldStack.setItemDamage(newDamage);
+					player.openContainer.detectAndSendChanges();
 				}
 			}
 		});

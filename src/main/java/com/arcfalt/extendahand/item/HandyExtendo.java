@@ -24,6 +24,10 @@ public class HandyExtendo extends BaseExtendo
 		setRegistryName("handyextendo");
 		setUnlocalizedName("handyextendo");
 		setMaxStackSize(1);
+		if(Config.baseDurability > 0)
+		{
+			setMaxDamage(Config.baseDurability);
+		}
 		GameRegistry.registerItem(this);
 	}
 

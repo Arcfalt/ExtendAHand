@@ -15,10 +15,16 @@ Allows for line creation between selected point and player position. Useful for 
 ##### Planar Extendo
 Allows for hollow box creation between two selected points. Useful for quickly creating entire rooms. Simply select two points, then hold shift and click one of the selected points again to build the box.
 
+## Configuration
+Each type of extendo can be seperately configured with the following options in the mod config file.
+- Maximum Amount of Blocks Built Per Use
+- Maximum Distance Reachable
+- Item Damage/Durability Toggle and Amount
+- Creative Only Toggle
+
 ## Future Plans
 Currently, all of these are just ideas with no specific order or timeframe. Some may be ready for release, some may be many versions later. I'm just noting them down so I don't forget any, and so you can get a rough idea of where the mod is headed in the future.
 - Undo
-- Item durability (limited use options)
 - More Shapes (like spheres)
 - Symmetry mode
 - Block replace

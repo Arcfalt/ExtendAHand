@@ -71,10 +71,15 @@ public class PlanarExtendo extends BasePointExtendo
 		Vec3i minLoc = new Vec3i(Math.min(locA.getX(), locB.getX()), Math.min(locA.getY(), locB.getY()), Math.min(locA.getZ(), locB.getZ()));
 		Vec3i maxLoc = new Vec3i(Math.max(locA.getX(), locB.getX()), Math.max(locA.getY(), locB.getY()), Math.max(locA.getZ(), locB.getZ()));
 
+		int maxAxis = Config.boxMaxAxis;
+		if(maxLoc.getX() - minLoc.getX() > maxAxis || maxLoc.getY() - minLoc.getY() > maxAxis || maxLoc.getZ() - minLoc.getZ() > maxAxis)
+		{
+			return positions;
+		}
+
 		int amount = 0;
 		int maxBlocks = getMaxBlocks();
 
-		// Todo - Optimize this, currently using an inefficient algorithm because I made it while tired
 		for(int x = minLoc.getX(); x <= maxLoc.getX(); x++)
 		{
 			for(int y = minLoc.getY(); y <= maxLoc.getY(); y++)

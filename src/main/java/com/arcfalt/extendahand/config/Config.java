@@ -9,13 +9,15 @@ public class Config
 	public static Configuration config;
 
 	private static final int blocksMin = 1;
-	private static final int blocksMax = 80000;
+	private static final int blocksMax = 20000;
 	private static final int distanceMin = 5;
 	private static final int distanceMax = 800;
 	private static final int durabilityMin = 0;
-	private static final int durabilityMax = 800000;
+	private static final int durabilityMax = 100000;
 	private static final float cooldownMin = 0.0f;
 	private static final float cooldownMax = 300.0f;
+	private static final int axisMin = 5;
+	private static final int axisMax = 3300;
 
 	private static final String baseCategory = "basic";
 	public static int baseMaxDistance = 80;
@@ -36,6 +38,7 @@ public class Config
 	public static boolean boxCreativeOnly = false;
 	public static int boxDurability = 0;
 	public static float boxCooldown = 0.0f;
+	public static int boxMaxAxis = 100;
 
 	public static void load(File configFile)
 	{
@@ -64,6 +67,7 @@ public class Config
 		boxCreativeOnly = config.getBoolean("boxCreativeOnly", boxCategory, boxCreativeOnly, "If the box tool should have no crafting recipe and be for creative mode only.");
 		boxDurability = config.getInt("boxDurability", boxCategory, boxDurability, durabilityMin, durabilityMax, "The durability of the box tool. Each block placed uses 1 durability. Set to 0 to disable item durability and have infinite usages.");
 		boxCooldown = config.getFloat("boxCooldown", boxCategory, boxCooldown, cooldownMin, cooldownMax, "The amount of time in seconds until the box tool can be used again. Set to 0.0 to disable the cooldown and allow for instant usage.");
+		boxMaxAxis = config.getInt("boxMaxAxis", boxCategory, boxMaxAxis, axisMin, axisMax, "The maximum length of a single axis in the selection of the box tool.");
 
 		if(config.hasChanged())
 		{

@@ -119,20 +119,7 @@ public class BasePointExtendo extends BaseExtendo
 		}
 		worldIn.playSoundAtEntity(playerIn, "random.bow", 0.5F, 0.4F / (itemRand.nextFloat() * 0.4F + 0.8F));
 
-		NBTTagCompound tags;
-
-		if(gotTags == null) tags = new NBTTagCompound();
-		else tags = (NBTTagCompound) gotTags.copy();
-
-		int placeIn = 0;
-		if(tags.hasKey(LOC_NEXT))
-		{
-			placeIn = tags.getInteger(LOC_NEXT);
-			placeIn = MathHelper.clamp_int(placeIn, 0, 1);
-		}
-		tags.setLong(LOC + placeIn, blockPos.toLong());
-		tags.setInteger(LOC_NEXT, 1 - placeIn);
-		PacketHandler.sendExtendoNBT(itemStackIn, tags);
+		PacketHandler.sendExtendoNBT(blockPos);
 		return itemStackIn;
 	}
 }

@@ -26,8 +26,8 @@ public class PacketHandler
 	}
 
 	@SideOnly(Side.CLIENT)
-	public static void sendExtendoNBT(ItemStack stack, NBTTagCompound tags)
+	public static void sendExtendoNBT(BlockPos target)
 	{
-		INSTANCE.sendToServer(new ExtendoNBTMessage(stack, tags));
+		INSTANCE.sendToServer(new ExtendoNBTMessage(target));
 	}
 }

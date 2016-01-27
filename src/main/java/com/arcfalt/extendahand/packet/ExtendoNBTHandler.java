@@ -1,40 +1,39 @@
 package com.arcfalt.extendahand.packet;
 
-import com.arcfalt.extendahand.item.BaseExtendo;
+import com.arcfalt.extendahand.item.BasePointExtendo;
 import com.arcfalt.extendahand.utils.ItemUtils;
-import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.network.NetHandlerPlayServer;
-import net.minecraft.util.BlockPos;
-import net.minecraft.util.ChatComponentText;
-import net.minecraft.util.EnumChatFormatting;
-import net.minecraft.util.IThreadListener;
-import net.minecraft.world.WorldServer;
+import net.minecraft.util.MathHelper;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 
-import java.util.Set;
-
 public class ExtendoNBTHandler implements IMessageHandler<ExtendoNBTMessage, IMessage>
 {
+	static final String LOC = "extendoLoc";
+	static final String LOC_NEXT = "extendoLocNext";
+
 	@Override
 	public IMessage onMessage(final ExtendoNBTMessage message, final MessageContext ctx)
 	{
-		EntityPlayerMP serverPlayer = ctx.getServerHandler().playerEntity;
-		ItemStack held = serverPlayer.getHeldItem();
+		EntityPlayerMP player = ctx.getServerHandler().playerEntity;
+		ItemStack itemStackIn = player.getHeldItem();
+		Item heldItem = itemStackIn.getItem();
+		if(!(heldItem instanceof BasePointExtendo)) return null;
 
-		if(held.getItem() != message.stack.getItem()) return null;
-		Item heldItem = held.getItem();
-		if(!(heldItem instanceof BaseExtendo)) return null;
-
-		NBTTagCompound compound = ItemUtils.getOrCreateTagCompound(held);
-		compound.merge(message.tags);
+		NBTTagCompound tags = ItemUtils.getOrCreateTagCompound(itemStackIn);
+		int placeIn = 0;
+		if(tags.hasKey(LOC_NEXT))
+		{
+			placeIn = tags.getInteger(LOC_NEXT);
+			placeIn = MathHelper.clamp_int(placeIn, 0, 1);
+		}
+		tags.setLong(LOC + placeIn, message.target.toLong());
+		tags.setInteger(LOC_NEXT, 1 - placeIn);
+		player.inventoryContainer.detectAndSendChanges();
 		return null;
 	}
 }

@@ -1,15 +1,13 @@
 package com.arcfalt.extendahand.packet;
 
-import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
-import java.util.Set;
 
 public class PacketHandler
 {
@@ -22,9 +20,9 @@ public class PacketHandler
 	}
 
 	@SideOnly(Side.CLIENT)
-	public static void sendExtendoPlacement(Block block, int meta, Set<BlockPos> positions)
+	public static void sendExtendoPlacement(BlockPos target, EnumFacing side)
 	{
-		INSTANCE.sendToServer(new ExtendoPlaceMessage(block, meta, positions));
+		INSTANCE.sendToServer(new ExtendoPlaceMessage(target, side));
 	}
 
 	@SideOnly(Side.CLIENT)

@@ -29,15 +29,17 @@ public class ExtendoPlaceHandler implements IMessageHandler<ExtendoPlaceMessage,
 			{
 				NetHandlerPlayServer serverHandler = ctx.getServerHandler();
 				EntityPlayer player = serverHandler.playerEntity;
-				Set<BlockPos> positions = message.positions;
-				int meta = message.meta;
-				Block useBlock = message.block;
-				IBlockState setState = useBlock.getStateFromMeta(meta);
 
 				ItemStack heldStack = player.getHeldItem();
 				Item heldItem = heldStack.getItem();
 				if(!(heldItem instanceof BaseExtendo)) return;
 				BaseExtendo extendo = (BaseExtendo)heldItem;
+
+				IBlockState blockState = player.worldObj.getBlockState(message.target);
+				IBlockState setState = extendo.getResourceState(heldStack, blockState);
+				Block useBlock = setState.getBlock();
+				int meta = useBlock.getMetaFromState(setState);
+				Set<BlockPos> positions = extendo.actingBlocks(message.target, message.side, player.worldObj, player, true);
 
 				if(heldStack.isItemStackDamageable() && heldStack.getItemDamage() >= heldStack.getMaxDamage())
 				{

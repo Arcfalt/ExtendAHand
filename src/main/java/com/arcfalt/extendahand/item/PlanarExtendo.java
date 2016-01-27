@@ -56,7 +56,7 @@ public class PlanarExtendo extends BasePointExtendo
 	}
 
 	@Override
-	protected Set<BlockPos> actingBlocks(BlockPos blockPos, EnumFacing sideHit, World world, EntityPlayer player, boolean trimAmount)
+	public Set<BlockPos> actingBlocks(BlockPos blockPos, EnumFacing sideHit, World world, EntityPlayer player, boolean trimAmount)
 	{
 		Set<BlockPos> positions = new HashSet<BlockPos>();
 

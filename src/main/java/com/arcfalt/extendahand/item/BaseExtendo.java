@@ -100,7 +100,7 @@ public class BaseExtendo extends Item
 	Find the blocks to act upon
 	Override this to return the desired blocks in child items
 	 */
-	protected Set<BlockPos> actingBlocks(BlockPos blockPos, EnumFacing sideHit, World world, EntityPlayer player, boolean trimAmount)
+	public Set<BlockPos> actingBlocks(BlockPos blockPos, EnumFacing sideHit, World world, EntityPlayer player, boolean trimAmount)
 	{
 		Set<BlockPos> positions = new HashSet<BlockPos>();
 		return positions;
@@ -162,14 +162,8 @@ public class BaseExtendo extends Item
 		}
 		worldIn.playSoundAtEntity(playerIn, "random.bow", 0.5F, 0.4F / (itemRand.nextFloat() * 0.4F + 0.8F));
 
-		// Get necessary block data
-		IBlockState setState = getResourceState(itemStackIn, blockState);
-		Block useBlock = setState.getBlock();
-		int meta = useBlock.getMetaFromState(setState);
-		Set<BlockPos> positions = actingBlocks(blockPos, mouseOver.sideHit, worldIn, playerIn, true);
-
 		// Send placement packet
-		PacketHandler.sendExtendoPlacement(useBlock, meta, positions);
+		PacketHandler.sendExtendoPlacement(blockPos, mouseOver.sideHit);
 		return itemStackIn;
 	}
 

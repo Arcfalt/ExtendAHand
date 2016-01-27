@@ -108,11 +108,7 @@ public class BasePointExtendo extends BaseExtendo
 		NBTTagCompound gotTags = itemStackIn.getTagCompound();
 		if(playerIn.isSneaking() && gotTags != null && gotTags.hasKey(LOC + 0) && gotTags.hasKey(LOC + 1))
 		{
-			IBlockState setState = getResourceState(itemStackIn, blockState);
-			Block useBlock = setState.getBlock();
-			int meta = useBlock.getMetaFromState(setState);
-			Set<BlockPos> positions = actingBlocks(blockPos, mouseOver.sideHit, playerIn.worldObj, playerIn, true);
-			PacketHandler.sendExtendoPlacement(useBlock, meta, positions);
+			PacketHandler.sendExtendoPlacement(blockPos, mouseOver.sideHit);
 			return itemStackIn;
 		}
 

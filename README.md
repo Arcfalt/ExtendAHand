@@ -21,6 +21,7 @@ Each type of extendo can be seperately configured with the following options in 
 - Maximum Distance Reachable
 - Item Damage/Durability Toggle and Amount
 - Creative Only Toggle
+Additionally, the planar tool can have a maximum single axis length set as well.
 
 ## Future Plans
 Currently, all of these are just ideas with no specific order or timeframe. Some may be ready for release, some may be many versions later. I'm just noting them down so I don't forget any, and so you can get a rough idea of where the mod is headed in the future.

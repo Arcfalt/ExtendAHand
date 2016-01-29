@@ -2,7 +2,6 @@ package com.arcfalt.extendahand.item;
 
 import com.arcfalt.extendahand.config.Config;
 import com.arcfalt.extendahand.utils.ItemUtils;
-import com.arcfalt.extendahand.utils.RenderUtils;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -12,7 +11,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.MathHelper;
 import net.minecraft.util.Vec3i;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;

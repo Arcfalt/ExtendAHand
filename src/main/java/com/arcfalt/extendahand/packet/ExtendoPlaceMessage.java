@@ -1,15 +1,9 @@
 package com.arcfalt.extendahand.packet;
 
 import io.netty.buffer.ByteBuf;
-import net.minecraft.block.Block;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
-import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
-
-import java.util.HashSet;
-import java.util.Set;
 
 public class ExtendoPlaceMessage implements IMessage
 {

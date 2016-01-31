@@ -14,6 +14,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.MathHelper;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
@@ -92,13 +93,13 @@ public class BasePointExtendo extends BaseExtendo
 		// Make sure the target is a valid block
 		if(mouseOver == null)
 		{
-			sendMessage(EnumChatFormatting.AQUA + "No block targeted!", playerIn);
+			flipPointTarget(itemStackIn);
 			return itemStackIn;
 		}
 		BlockPos blockPos = mouseOver.getBlockPos();
 		if(blockPos == null)
 		{
-			sendMessage(EnumChatFormatting.AQUA + "No block targeted!", playerIn);
+			flipPointTarget(itemStackIn);
 			return itemStackIn;
 		}
 		IBlockState blockState = worldIn.getBlockState(blockPos);
@@ -113,12 +114,24 @@ public class BasePointExtendo extends BaseExtendo
 
 		if(block == null || block.getMaterial() == Material.air)
 		{
-			sendMessage(EnumChatFormatting.AQUA + "No block targeted!", playerIn);
+			flipPointTarget(itemStackIn);
 			return itemStackIn;
 		}
 		worldIn.playSoundAtEntity(playerIn, "random.bow", 0.5F, 0.4F / (itemRand.nextFloat() * 0.4F + 0.8F));
 
 		PacketHandler.sendExtendoNBT(blockPos);
 		return itemStackIn;
+	}
+
+	protected void flipPointTarget(ItemStack itemStackIn)
+	{
+		NBTTagCompound gotTags = itemStackIn.getTagCompound();
+		if(gotTags == null) return;
+		if(!gotTags.hasKey(LOC_NEXT)) return;
+		int next = MathHelper.clamp_int(gotTags.getInteger(LOC_NEXT), 0, 1);
+		if(!gotTags.hasKey(LOC + next)) return;
+		BlockPos pos = BlockPos.fromLong(gotTags.getLong(LOC + next));
+		if(pos == null) return;
+		PacketHandler.sendExtendoNBT(pos);
 	}
 }

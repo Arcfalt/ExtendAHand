@@ -20,6 +20,7 @@ Each type of extendo can be seperately configured with the following options in 
 - Maximum Amount of Blocks Built Per Use
 - Maximum Distance Reachable
 - Item Damage/Durability Toggle and Amount
+- Item Cooldown Time
 - Creative Only Toggle
 
 Additionally, the planar tool can have a maximum single axis length set as well.

@@ -44,6 +44,18 @@ public class ExtendedExtendo extends BaseExtendo
 		return Config.lineMaxDistance;
 	}
 
+	@Override
+	public boolean getHasCooldown()
+	{
+		return Config.lineCooldown > 0;
+	}
+
+	@Override
+	public int getCooldown()
+	{
+		return Config.lineCooldown;
+	}
+
 	@SideOnly(Side.CLIENT)
 	public void initModel()
 	{

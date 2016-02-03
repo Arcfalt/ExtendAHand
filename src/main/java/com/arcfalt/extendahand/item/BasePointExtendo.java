@@ -42,6 +42,18 @@ public class BasePointExtendo extends BaseExtendo
 	}
 
 	@Override
+	public boolean getHasCooldown()
+	{
+		return Config.boxCooldown > 0;
+	}
+
+	@Override
+	public int getCooldown()
+	{
+		return Config.boxCooldown;
+	}
+
+	@Override
 	@SideOnly(Side.CLIENT)
 	public void drawHighlight(RenderWorldLastEvent event, EntityPlayerSP player, ItemStack stack)
 	{

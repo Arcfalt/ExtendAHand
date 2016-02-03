@@ -210,4 +210,14 @@ public class BaseExtendo extends Item
 		if(!isDamageable()) return super.getIsRepairable(toRepair, repair);
 		return repair.getItem() == Items.ender_pearl || repair.getItem() == Items.ender_eye || super.getIsRepairable(toRepair, repair);
 	}
+
+	public boolean getHasCooldown()
+	{
+		return Config.baseCooldown > 0;
+	}
+
+	public int getCooldown()
+	{
+		return Config.baseCooldown;
+	}
 }

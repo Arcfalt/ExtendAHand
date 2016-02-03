@@ -43,6 +43,18 @@ public class HandyExtendo extends BaseExtendo
 		return Config.baseMaxDistance;
 	}
 
+	@Override
+	public boolean getHasCooldown()
+	{
+		return Config.baseCooldown > 0;
+	}
+
+	@Override
+	public int getCooldown()
+	{
+		return Config.baseCooldown;
+	}
+
 	@SideOnly(Side.CLIENT)
 	public void initModel()
 	{

@@ -47,6 +47,18 @@ public class PlanarExtendo extends BasePointExtendo
 		return Config.boxMaxDistance;
 	}
 
+	@Override
+	public boolean getHasCooldown()
+	{
+		return Config.boxCooldown > 0;
+	}
+
+	@Override
+	public int getCooldown()
+	{
+		return Config.boxCooldown;
+	}
+
 	@SideOnly(Side.CLIENT)
 	public void initModel()
 	{

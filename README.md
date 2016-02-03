@@ -29,6 +29,8 @@ Additionally, the planar tool can have a maximum single axis length set as well.
 Currently, all of these are just ideas with no specific order or timeframe. Some may be ready for release, some may be many versions later. I'm just noting them down so I don't forget any, and so you can get a rough idea of where the mod is headed in the future.
 - Undo
 - More Shapes (like spheres)
+- In-game extendo customization
+- Visual cooldown indication
 - Symmetry mode
 - Block replace
 - Distant mining

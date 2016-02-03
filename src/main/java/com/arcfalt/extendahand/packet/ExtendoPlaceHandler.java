@@ -7,6 +7,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetHandlerPlayServer;
 import net.minecraft.util.*;
 import net.minecraft.world.WorldServer;
@@ -18,6 +19,8 @@ import java.util.Set;
 
 public class ExtendoPlaceHandler implements IMessageHandler<ExtendoPlaceMessage, IMessage>
 {
+	static final String COOLDOWN_START = "extendoCooldown";
+
 	@Override
 	public IMessage onMessage(final ExtendoPlaceMessage message, final MessageContext ctx)
 	{
@@ -34,6 +37,33 @@ public class ExtendoPlaceHandler implements IMessageHandler<ExtendoPlaceMessage,
 				Item heldItem = heldStack.getItem();
 				if(!(heldItem instanceof BaseExtendo)) return;
 				BaseExtendo extendo = (BaseExtendo)heldItem;
+
+				if(extendo.getHasCooldown())
+				{
+					NBTTagCompound tags = ItemUtils.getOrCreateTagCompound(heldStack);
+					if(tags.hasKey(COOLDOWN_START))
+					{
+						long startTime = tags.getLong(COOLDOWN_START);
+						long currentTime = player.worldObj.getTotalWorldTime();
+						long diffTime = currentTime - startTime;
+						if(diffTime < extendo.getCooldown())
+						{
+							if(currentTime < startTime)
+							{
+								tags.setLong(COOLDOWN_START, currentTime);
+								diffTime = extendo.getCooldown();
+							}
+							else
+							{
+								diffTime = extendo.getCooldown() - diffTime;
+							}
+							String message = EnumChatFormatting.RED + "Item on cooldown! " + diffTime + " ticks remain.";
+							player.addChatComponentMessage(new ChatComponentText(message));
+							return;
+						}
+					}
+					tags.setLong(COOLDOWN_START, player.worldObj.getTotalWorldTime());
+				}
 
 				IBlockState blockState = player.worldObj.getBlockState(message.target);
 				IBlockState setState = extendo.getResourceState(heldStack, blockState);

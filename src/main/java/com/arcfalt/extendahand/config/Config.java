@@ -42,7 +42,7 @@ public class Config
 	public static int boxMaxDistance = 80;
 	public static boolean boxCreativeOnly = false;
 	public static int boxDurability = 0;
-	public static int boxCooldown = 0;
+	public static int boxCooldown = 160;
 	public static int boxMaxAxis = 100;
 	//public static int boxUndoLevels = 0;
 

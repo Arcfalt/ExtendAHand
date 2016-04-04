@@ -15,6 +15,9 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.*;
+import net.minecraft.util.Movi
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.fml.relauncher.Side;
@@ -48,7 +51,7 @@ public class BaseExtendo extends Item
 	@SideOnly(Side.CLIENT)
 	public void drawHighlight(RenderWorldLastEvent event, EntityPlayerSP player, ItemStack stack)
 	{
-		MovingObjectPosition mouseOver = getMouseOver();
+		RayTraceResult mouseOver = getMouseOver();
 		BlockPos blockPos = getTargetBlockPos(player, mouseOver);
 		if(blockPos == null) return;
 		Set<BlockPos> positions = actingBlocks(blockPos, mouseOver.sideHit, player.worldObj, player, false);
@@ -59,7 +62,7 @@ public class BaseExtendo extends Item
 	Get the object position that is under the mouse at long range
 	 */
 	@SideOnly(Side.CLIENT)
-	protected MovingObjectPosition getMouseOver()
+	protected RayTraceResult getMouseOver()
 	{
 		// Non-use of partial ticks intended to match up render area with placement area bound to tick
 		return Minecraft.getMinecraft().getRenderViewEntity().rayTrace(getMaxDistance(), 1f);
@@ -69,7 +72,7 @@ public class BaseExtendo extends Item
 	Get the block position that is at the object position given
 	 */
 	@SideOnly(Side.CLIENT)
-	protected BlockPos getTargetBlockPos(EntityPlayer player, MovingObjectPosition mouseOver)
+	protected BlockPos getTargetBlockPos(EntityPlayer player, RayTraceResult mouseOver)
 	{
 		if(mouseOver == null || player == null) return null;
 

@@ -6,7 +6,8 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.MathHelper;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
@@ -20,7 +21,7 @@ public class ExtendoNBTHandler implements IMessageHandler<ExtendoNBTMessage, IMe
 	public IMessage onMessage(final ExtendoNBTMessage message, final MessageContext ctx)
 	{
 		EntityPlayerMP player = ctx.getServerHandler().playerEntity;
-		ItemStack itemStackIn = player.getHeldItem();
+		ItemStack itemStackIn = player.getHeldItem(EnumHand.MAIN_HAND);
 		Item heldItem = itemStackIn.getItem();
 		if(!(heldItem instanceof BasePointExtendo)) return null;
 

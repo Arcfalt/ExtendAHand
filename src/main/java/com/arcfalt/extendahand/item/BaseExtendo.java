@@ -15,9 +15,9 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.*;
-import net.minecraft.util.Movi
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.World;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.fml.relauncher.Side;
@@ -84,7 +84,7 @@ public class BaseExtendo extends Item
 		// Make sure the block is valid
 		IBlockState blockState = world.getBlockState(blockPos);
 		Block block = blockState.getBlock();
-		if(block == null || block.getMaterial() == Material.air) return null;
+		if(block == null || block.getMaterial(blockState) == Material.air) return null;
 
 		// All valid, return it
 		return blockPos;
@@ -114,7 +114,7 @@ public class BaseExtendo extends Item
 	 */
 	protected void sendMessage(String message, EntityPlayer player)
 	{
-		player.addChatComponentMessage(new ChatComponentText(message));
+		player.addChatComponentMessage(new TextComponentString(message));
 	}
 
 	/*
@@ -142,28 +142,28 @@ public class BaseExtendo extends Item
 		if(!worldIn.isRemote) return itemStackIn;
 
 		Minecraft minecraft = Minecraft.getMinecraft();
-		MovingObjectPosition mouseOver = minecraft.getRenderViewEntity().rayTrace(90.0, 1f);
+		RayTraceResult mouseOver = minecraft.getRenderViewEntity().rayTrace(90.0, 1f);
 
 		// Make sure the target is a valid block
 		if(mouseOver == null)
 		{
-			sendMessage(EnumChatFormatting.AQUA + "No block targeted!", playerIn);
+			sendMessage("No block targeted!", playerIn);
 			return itemStackIn;
 		}
 		BlockPos blockPos = mouseOver.getBlockPos();
 		if(blockPos == null)
 		{
-			sendMessage(EnumChatFormatting.AQUA + "No block targeted!", playerIn);
+			sendMessage("No block targeted!", playerIn);
 			return itemStackIn;
 		}
 		IBlockState blockState = worldIn.getBlockState(blockPos);
 		Block block = blockState.getBlock();
 		if(block == null || block.getMaterial() == Material.air)
 		{
-			sendMessage(EnumChatFormatting.AQUA + "No block targeted!", playerIn);
+			sendMessage("No block targeted!", playerIn);
 			return itemStackIn;
 		}
-		worldIn.playSoundAtEntity(playerIn, "random.bow", 0.5F, 0.4F / (itemRand.nextFloat() * 0.4F + 0.8F));
+		//worldIn.playSoundAtEntity(playerIn, "random.bow", 0.5F, 0.4F / (itemRand.nextFloat() * 0.4F + 0.8F));
 
 		// Send placement packet
 		PacketHandler.sendExtendoPlacement(blockPos, mouseOver.sideHit);
@@ -194,7 +194,7 @@ public class BaseExtendo extends Item
 			if(existingId == blockId && existingMeta == blockMeta)
 			{
 				tags.removeTag("extendoResource");
-				sendMessage(EnumChatFormatting.LIGHT_PURPLE + "Building resource deselected!", playerIn);
+				sendMessage("Building resource deselected!", playerIn);
 				return true;
 			}
 		}
@@ -203,7 +203,7 @@ public class BaseExtendo extends Item
 		resourceTag.setInteger("block", blockId);
 		resourceTag.setInteger("meta", blockMeta);
 		tags.setTag("extendoResource", resourceTag);
-		sendMessage(EnumChatFormatting.AQUA + "Building resource selected!", playerIn);
+		sendMessage("Building resource selected!", playerIn);
 		return true;
 	}
 

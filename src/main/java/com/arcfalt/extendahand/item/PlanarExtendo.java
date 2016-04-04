@@ -5,13 +5,14 @@ import com.arcfalt.extendahand.utils.ItemUtils;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.resources.model.ModelResourceLocation;
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.Vec3i;
+import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.common.registry.GameRegistry;
@@ -70,7 +71,7 @@ public class PlanarExtendo extends BasePointExtendo
 	{
 		Set<BlockPos> positions = new HashSet<BlockPos>();
 
-		ItemStack stack = player.getHeldItem();
+		ItemStack stack = player.getHeldItem(EnumHand.MAIN_HAND);
 		NBTTagCompound tags = ItemUtils.getOrCreateTagCompound(stack);
 		String posTag0 = LOC + 0;
 		String posTag1 = LOC + 1;
@@ -101,7 +102,7 @@ public class PlanarExtendo extends BasePointExtendo
 						BlockPos acting = new BlockPos(x, y, z);
 						IBlockState blockState = world.getBlockState(acting);
 						Block block = blockState.getBlock();
-						if(block.getMaterial() == Material.air)
+						if(block.getMaterial(blockState) == Material.air)
 						{
 							amount += 1;
 							if(amount > maxBlocks && trimAmount)

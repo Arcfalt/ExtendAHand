@@ -137,9 +137,10 @@ public class BaseExtendo extends Item
 	Handle the right click functionality, which is by default building whatever actingBlocks selects
 	 */
 	@Override
-	public ItemStack onItemRightClick(ItemStack itemStackIn, World worldIn, EntityPlayer playerIn)
+	public ActionResult<ItemStack> onItemRightClick(ItemStack itemStackIn, World worldIn, EntityPlayer playerIn, EnumHand hand)
 	{
-		if(!worldIn.isRemote) return itemStackIn;
+		ActionResult<ItemStack> returnVal = new ActionResult<ItemStack>(EnumActionResult.SUCCESS, itemStackIn);
+		if(!worldIn.isRemote) return returnVal;
 
 		Minecraft minecraft = Minecraft.getMinecraft();
 		RayTraceResult mouseOver = minecraft.getRenderViewEntity().rayTrace(90.0, 1f);
@@ -148,40 +149,40 @@ public class BaseExtendo extends Item
 		if(mouseOver == null)
 		{
 			sendMessage("No block targeted!", playerIn);
-			return itemStackIn;
+			return returnVal;
 		}
 		BlockPos blockPos = mouseOver.getBlockPos();
 		if(blockPos == null)
 		{
 			sendMessage("No block targeted!", playerIn);
-			return itemStackIn;
+			return returnVal;
 		}
 		IBlockState blockState = worldIn.getBlockState(blockPos);
 		Block block = blockState.getBlock();
-		if(block == null || block.getMaterial() == Material.air)
+		if(block == null || block.getMaterial(blockState) == Material.air)
 		{
 			sendMessage("No block targeted!", playerIn);
-			return itemStackIn;
+			return returnVal;
 		}
 		//worldIn.playSoundAtEntity(playerIn, "random.bow", 0.5F, 0.4F / (itemRand.nextFloat() * 0.4F + 0.8F));
 
 		// Send placement packet
 		PacketHandler.sendExtendoPlacement(blockPos, mouseOver.sideHit);
-		return itemStackIn;
+		return returnVal;
 	}
 
 	/*
 	Handle item usage, which by default is selecting and deselecting resources when in sneak mode
 	 */
 	@Override
-	public boolean onItemUse(ItemStack stack, EntityPlayer playerIn, World worldIn, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ)
+	public EnumActionResult onItemUse(ItemStack stack, EntityPlayer playerIn, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ)
 	{
-		if(!playerIn.isSneaking()) return false;
-		if(pos == null) return false;
+		if(!playerIn.isSneaking()) return EnumActionResult.PASS;
+		if(pos == null) return EnumActionResult.PASS;
 		IBlockState blockState = worldIn.getBlockState(pos);
 		Block block = blockState.getBlock();
-		if(block == null || block.getMaterial() == Material.air) return false;
-		if(worldIn.isRemote) return true;
+		if(block == null || block.getMaterial(blockState) == Material.air) return EnumActionResult.PASS;
+		if(worldIn.isRemote) return EnumActionResult.SUCCESS;
 
 		int blockId = Block.blockRegistry.getIDForObject(block);
 		int blockMeta = block.getMetaFromState(blockState);
@@ -195,7 +196,7 @@ public class BaseExtendo extends Item
 			{
 				tags.removeTag("extendoResource");
 				sendMessage("Building resource deselected!", playerIn);
-				return true;
+				return EnumActionResult.SUCCESS;
 			}
 		}
 
@@ -204,7 +205,7 @@ public class BaseExtendo extends Item
 		resourceTag.setInteger("meta", blockMeta);
 		tags.setTag("extendoResource", resourceTag);
 		sendMessage("Building resource selected!", playerIn);
-		return true;
+		return EnumActionResult.SUCCESS;
 	}
 
 	@Override

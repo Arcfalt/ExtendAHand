@@ -8,6 +8,7 @@ import com.arcfalt.extendahand.tabs.ModTabs;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -52,7 +53,11 @@ public class ModItems
 		}
 		if(!Config.boxCreativeOnly)
 		{
-			GameRegistry.addRecipe(new ItemStack(planarExtendo), "BSB", "IEI", "WSW", 'I', Items.ENDER_EYE, 'E', handyExtendo, 'B', Items.GHAST_TEAR, 'S', Blocks.STICKY_PISTON, 'W', new ItemStack(Items.POTIONITEM, 1, 8203));
+			NBTTagCompound nbt = new NBTTagCompound();
+			nbt.setString("Potion", "minecraft:leaping");
+			ItemStack potion = new ItemStack(Items.POTIONITEM);
+			potion.setTagCompound(nbt);
+			GameRegistry.addRecipe(new ItemStack(planarExtendo), "BSB", "IEI", "WSW", 'I', Items.ENDER_EYE, 'E', handyExtendo, 'B', Items.GHAST_TEAR, 'S', Blocks.STICKY_PISTON, 'W', potion);
 		}
 	}
 }

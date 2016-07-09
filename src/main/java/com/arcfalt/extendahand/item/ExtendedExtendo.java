@@ -4,11 +4,11 @@ import com.arcfalt.extendahand.config.Config;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.resources.model.ModelResourceLocation;
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.MathHelper;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.common.registry.GameRegistry;
@@ -85,7 +85,7 @@ public class ExtendedExtendo extends BaseExtendo
 	{
 		IBlockState blockState = world.getBlockState(blockPos);
 		Block block = blockState.getBlock();
-		if(block.getMaterial() == Material.air) positions.add(blockPos);
+		if(block.getMaterial(blockState) == Material.air) positions.add(blockPos);
 	}
 
 	private BlockPos fillPosXLine(Set<BlockPos> positions, BlockPos playerPos, BlockPos blockPos, World world)

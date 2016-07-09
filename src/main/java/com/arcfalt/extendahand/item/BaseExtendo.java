@@ -15,6 +15,9 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.*;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.World;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.fml.relauncher.Side;
@@ -48,7 +51,7 @@ public class BaseExtendo extends Item
 	@SideOnly(Side.CLIENT)
 	public void drawHighlight(RenderWorldLastEvent event, EntityPlayerSP player, ItemStack stack)
 	{
-		MovingObjectPosition mouseOver = getMouseOver();
+		RayTraceResult mouseOver = getMouseOver();
 		BlockPos blockPos = getTargetBlockPos(player, mouseOver);
 		if(blockPos == null) return;
 		Set<BlockPos> positions = actingBlocks(blockPos, mouseOver.sideHit, player.worldObj, player, false);
@@ -59,7 +62,7 @@ public class BaseExtendo extends Item
 	Get the object position that is under the mouse at long range
 	 */
 	@SideOnly(Side.CLIENT)
-	protected MovingObjectPosition getMouseOver()
+	protected RayTraceResult getMouseOver()
 	{
 		// Non-use of partial ticks intended to match up render area with placement area bound to tick
 		return Minecraft.getMinecraft().getRenderViewEntity().rayTrace(getMaxDistance(), 1f);
@@ -69,7 +72,7 @@ public class BaseExtendo extends Item
 	Get the block position that is at the object position given
 	 */
 	@SideOnly(Side.CLIENT)
-	protected BlockPos getTargetBlockPos(EntityPlayer player, MovingObjectPosition mouseOver)
+	protected BlockPos getTargetBlockPos(EntityPlayer player, RayTraceResult mouseOver)
 	{
 		if(mouseOver == null || player == null) return null;
 
@@ -81,7 +84,7 @@ public class BaseExtendo extends Item
 		// Make sure the block is valid
 		IBlockState blockState = world.getBlockState(blockPos);
 		Block block = blockState.getBlock();
-		if(block == null || block.getMaterial() == Material.air) return null;
+		if(block == null || block.getMaterial(blockState) == Material.air) return null;
 
 		// All valid, return it
 		return blockPos;
@@ -111,7 +114,7 @@ public class BaseExtendo extends Item
 	 */
 	protected void sendMessage(String message, EntityPlayer player)
 	{
-		player.addChatComponentMessage(new ChatComponentText(message));
+		player.addChatComponentMessage(new TextComponentString(message));
 	}
 
 	/*
@@ -134,51 +137,52 @@ public class BaseExtendo extends Item
 	Handle the right click functionality, which is by default building whatever actingBlocks selects
 	 */
 	@Override
-	public ItemStack onItemRightClick(ItemStack itemStackIn, World worldIn, EntityPlayer playerIn)
+	public ActionResult<ItemStack> onItemRightClick(ItemStack itemStackIn, World worldIn, EntityPlayer playerIn, EnumHand hand)
 	{
-		if(!worldIn.isRemote) return itemStackIn;
+		ActionResult<ItemStack> returnVal = new ActionResult<ItemStack>(EnumActionResult.SUCCESS, itemStackIn);
+		if(!worldIn.isRemote) return returnVal;
 
 		Minecraft minecraft = Minecraft.getMinecraft();
-		MovingObjectPosition mouseOver = minecraft.getRenderViewEntity().rayTrace(90.0, 1f);
+		RayTraceResult mouseOver = minecraft.getRenderViewEntity().rayTrace(90.0, 1f);
 
 		// Make sure the target is a valid block
 		if(mouseOver == null)
 		{
-			sendMessage(EnumChatFormatting.AQUA + "No block targeted!", playerIn);
-			return itemStackIn;
+			sendMessage("No block targeted!", playerIn);
+			return returnVal;
 		}
 		BlockPos blockPos = mouseOver.getBlockPos();
 		if(blockPos == null)
 		{
-			sendMessage(EnumChatFormatting.AQUA + "No block targeted!", playerIn);
-			return itemStackIn;
+			sendMessage("No block targeted!", playerIn);
+			return returnVal;
 		}
 		IBlockState blockState = worldIn.getBlockState(blockPos);
 		Block block = blockState.getBlock();
-		if(block == null || block.getMaterial() == Material.air)
+		if(block == null || block.getMaterial(blockState) == Material.air)
 		{
-			sendMessage(EnumChatFormatting.AQUA + "No block targeted!", playerIn);
-			return itemStackIn;
+			sendMessage("No block targeted!", playerIn);
+			return returnVal;
 		}
-		worldIn.playSoundAtEntity(playerIn, "random.bow", 0.5F, 0.4F / (itemRand.nextFloat() * 0.4F + 0.8F));
+		//worldIn.playSoundAtEntity(playerIn, "random.bow", 0.5F, 0.4F / (itemRand.nextFloat() * 0.4F + 0.8F));
 
 		// Send placement packet
 		PacketHandler.sendExtendoPlacement(blockPos, mouseOver.sideHit);
-		return itemStackIn;
+		return returnVal;
 	}
 
 	/*
 	Handle item usage, which by default is selecting and deselecting resources when in sneak mode
 	 */
 	@Override
-	public boolean onItemUse(ItemStack stack, EntityPlayer playerIn, World worldIn, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ)
+	public EnumActionResult onItemUse(ItemStack stack, EntityPlayer playerIn, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ)
 	{
-		if(!playerIn.isSneaking()) return false;
-		if(pos == null) return false;
+		if(!playerIn.isSneaking()) return EnumActionResult.PASS;
+		if(pos == null) return EnumActionResult.PASS;
 		IBlockState blockState = worldIn.getBlockState(pos);
 		Block block = blockState.getBlock();
-		if(block == null || block.getMaterial() == Material.air) return false;
-		if(worldIn.isRemote) return true;
+		if(block == null || block.getMaterial(blockState) == Material.air) return EnumActionResult.PASS;
+		if(worldIn.isRemote) return EnumActionResult.SUCCESS;
 
 		int blockId = Block.blockRegistry.getIDForObject(block);
 		int blockMeta = block.getMetaFromState(blockState);
@@ -191,8 +195,8 @@ public class BaseExtendo extends Item
 			if(existingId == blockId && existingMeta == blockMeta)
 			{
 				tags.removeTag("extendoResource");
-				sendMessage(EnumChatFormatting.LIGHT_PURPLE + "Building resource deselected!", playerIn);
-				return true;
+				sendMessage("Building resource deselected!", playerIn);
+				return EnumActionResult.SUCCESS;
 			}
 		}
 
@@ -200,8 +204,8 @@ public class BaseExtendo extends Item
 		resourceTag.setInteger("block", blockId);
 		resourceTag.setInteger("meta", blockMeta);
 		tags.setTag("extendoResource", resourceTag);
-		sendMessage(EnumChatFormatting.AQUA + "Building resource selected!", playerIn);
-		return true;
+		sendMessage("Building resource selected!", playerIn);
+		return EnumActionResult.SUCCESS;
 	}
 
 	@Override

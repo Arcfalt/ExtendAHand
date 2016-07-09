@@ -5,6 +5,7 @@ import com.arcfalt.extendahand.item.BaseExtendo;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumHand;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
@@ -32,7 +33,7 @@ public class ClientProxy extends CommonProxy
 	{
 		// Get the player and their held item
 		EntityPlayerSP player = Minecraft.getMinecraft().thePlayer;
-		ItemStack heldItem = player.getHeldItem();
+		ItemStack heldItem = player.getHeldItem(EnumHand.MAIN_HAND);
 
 		// Check if the held item is an extendo
 		if(heldItem == null) return;

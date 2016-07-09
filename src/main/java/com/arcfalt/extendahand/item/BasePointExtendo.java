@@ -12,10 +12,12 @@ import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.BlockPos;
-import net.minecraft.util.EnumChatFormatting;
-import net.minecraft.util.MathHelper;
-import net.minecraft.util.MovingObjectPosition;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.EnumActionResult;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.fml.relauncher.Side;
@@ -57,7 +59,7 @@ public class BasePointExtendo extends BaseExtendo
 	@SideOnly(Side.CLIENT)
 	public void drawHighlight(RenderWorldLastEvent event, EntityPlayerSP player, ItemStack stack)
 	{
-		MovingObjectPosition mouseOver = getMouseOver();
+		RayTraceResult mouseOver = getMouseOver();
 		BlockPos blockPos = getTargetBlockPos(player, mouseOver);
 		Set<BlockPos> actingBlocks = actingBlocks(blockPos, mouseOver.sideHit, player.worldObj, player, false);
 		RenderUtils.renderBlockOverlays(event, player, actingBlocks, 1f, .8f, 1f, 0.001f);
@@ -95,24 +97,25 @@ public class BasePointExtendo extends BaseExtendo
 	}
 
 	@Override
-	public ItemStack onItemRightClick(ItemStack itemStackIn, World worldIn, EntityPlayer playerIn)
+	public ActionResult<ItemStack> onItemRightClick(ItemStack itemStackIn, World worldIn, EntityPlayer playerIn, EnumHand hand)
 	{
-		if(!worldIn.isRemote) return itemStackIn;
+		ActionResult<ItemStack> returnVal = new ActionResult<ItemStack>(EnumActionResult.SUCCESS, itemStackIn);
+		if(!worldIn.isRemote) return returnVal;
 
 		Minecraft minecraft = Minecraft.getMinecraft();
-		MovingObjectPosition mouseOver = minecraft.getRenderViewEntity().rayTrace(90.0, 1f);
+		RayTraceResult mouseOver = minecraft.getRenderViewEntity().rayTrace(90.0, 1f);
 
 		// Make sure the target is a valid block
 		if(mouseOver == null)
 		{
 			flipPointTarget(itemStackIn);
-			return itemStackIn;
+			return returnVal;
 		}
 		BlockPos blockPos = mouseOver.getBlockPos();
 		if(blockPos == null)
 		{
 			flipPointTarget(itemStackIn);
-			return itemStackIn;
+			return returnVal;
 		}
 		IBlockState blockState = worldIn.getBlockState(blockPos);
 		Block block = blockState.getBlock();
@@ -121,18 +124,18 @@ public class BasePointExtendo extends BaseExtendo
 		if(playerIn.isSneaking() && gotTags != null && gotTags.hasKey(LOC + 0) && gotTags.hasKey(LOC + 1))
 		{
 			PacketHandler.sendExtendoPlacement(blockPos, mouseOver.sideHit);
-			return itemStackIn;
+			return returnVal;
 		}
 
-		if(block == null || block.getMaterial() == Material.air)
+		if(block == null || block.getMaterial(blockState) == Material.air)
 		{
 			flipPointTarget(itemStackIn);
-			return itemStackIn;
+			return returnVal;
 		}
-		worldIn.playSoundAtEntity(playerIn, "random.bow", 0.5F, 0.4F / (itemRand.nextFloat() * 0.4F + 0.8F));
+		//worldIn.playSoundAtEntity(playerIn, "random.bow", 0.5F, 0.4F / (itemRand.nextFloat() * 0.4F + 0.8F));
 
 		PacketHandler.sendExtendoNBT(blockPos);
-		return itemStackIn;
+		return returnVal;
 	}
 
 	protected void flipPointTarget(ItemStack itemStackIn)

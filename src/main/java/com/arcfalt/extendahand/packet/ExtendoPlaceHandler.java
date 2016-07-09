@@ -10,6 +10,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetHandlerPlayServer;
 import net.minecraft.util.*;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
@@ -33,7 +35,9 @@ public class ExtendoPlaceHandler implements IMessageHandler<ExtendoPlaceMessage,
 				NetHandlerPlayServer serverHandler = ctx.getServerHandler();
 				EntityPlayer player = serverHandler.playerEntity;
 
-				ItemStack heldStack = player.getHeldItem();
+				// Currently only operates from main hand
+				// Possible future plan to allow off-hand to act as a modifier or similar
+				ItemStack heldStack = player.getHeldItem(EnumHand.MAIN_HAND);
 				Item heldItem = heldStack.getItem();
 				if(!(heldItem instanceof BaseExtendo)) return;
 				BaseExtendo extendo = (BaseExtendo)heldItem;
@@ -57,8 +61,8 @@ public class ExtendoPlaceHandler implements IMessageHandler<ExtendoPlaceMessage,
 							{
 								diffTime = extendo.getCooldown() - diffTime;
 							}
-							String message = EnumChatFormatting.RED + "Item on cooldown! " + diffTime + " ticks remain.";
-							player.addChatComponentMessage(new ChatComponentText(message));
+							String message = "Item on cooldown! " + diffTime + " ticks remain.";
+							player.addChatComponentMessage(new TextComponentString(message));
 							return;
 						}
 					}
@@ -73,8 +77,8 @@ public class ExtendoPlaceHandler implements IMessageHandler<ExtendoPlaceMessage,
 
 				if(heldStack.isItemStackDamageable() && heldStack.getItemDamage() >= heldStack.getMaxDamage())
 				{
-					String message = EnumChatFormatting.RED + "Item is too damaged to use!";
-					player.addChatComponentMessage(new ChatComponentText(message));
+					String message = "Item is too damaged to use!";
+					player.addChatComponentMessage(new TextComponentString(message));
 					return;
 				}
 
@@ -88,8 +92,8 @@ public class ExtendoPlaceHandler implements IMessageHandler<ExtendoPlaceMessage,
 						placedBlocks += 1;
 						if(placedBlocks > maxBlocks)
 						{
-							String message = EnumChatFormatting.AQUA + "Maximum limit of " + maxBlocks + " blocks created!";
-							player.addChatComponentMessage(new ChatComponentText(message));
+							String message = "Maximum limit of " + maxBlocks + " blocks created!";
+							player.addChatComponentMessage(new TextComponentString(message));
 							break;
 						}
 						player.worldObj.setBlockState(pos, setState, 2);
@@ -97,8 +101,8 @@ public class ExtendoPlaceHandler implements IMessageHandler<ExtendoPlaceMessage,
 					}
 					else
 					{
-						String message = EnumChatFormatting.AQUA + "Building resource depleted!";
-						player.addChatComponentMessage(new ChatComponentText(message));
+						String message = "Building resource depleted!";
+						player.addChatComponentMessage(new TextComponentString(message));
 						break;
 					}
 				}

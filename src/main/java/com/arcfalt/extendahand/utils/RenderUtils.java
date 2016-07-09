@@ -4,9 +4,9 @@ import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.util.BlockPos;
+import net.minecraft.client.renderer.VertexBuffer;
+import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import org.lwjgl.opengl.GL11;
 
@@ -18,9 +18,9 @@ public class RenderUtils
 	{
 		if(positions == null || positions.size() == 0) return;
 
-		double doubleX = player.lastTickPosX + (player.posX - player.lastTickPosX) * event.partialTicks;
-		double doubleY = player.lastTickPosY + (player.posY - player.lastTickPosY) * event.partialTicks;
-		double doubleZ = player.lastTickPosZ + (player.posZ - player.lastTickPosZ) * event.partialTicks;
+		double doubleX = player.lastTickPosX + (player.posX - player.lastTickPosX) * event.getPartialTicks();
+		double doubleY = player.lastTickPosY + (player.posY - player.lastTickPosY) * event.getPartialTicks();
+		double doubleZ = player.lastTickPosZ + (player.posZ - player.lastTickPosZ) * event.getPartialTicks();
 
 		GlStateManager.pushAttrib();
 		GlStateManager.disableTexture2D();
@@ -47,7 +47,7 @@ public class RenderUtils
 	{
 		RenderHelper.enableStandardItemLighting();
 		Tessellator t = Tessellator.getInstance();
-		WorldRenderer renderer = t.getWorldRenderer();
+		VertexBuffer renderer = t.getBuffer();
 		renderer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION);
 		GlStateManager.color(r, g, b, a);
 		for(BlockPos coordinate : positions)
@@ -62,7 +62,7 @@ public class RenderUtils
 		RenderHelper.disableStandardItemLighting();
 	}
 
-	private static void renderSingleCube(WorldRenderer renderer, float x, float y, float z, float o)
+	private static void renderSingleCube(VertexBuffer renderer, float x, float y, float z, float o)
 	{
 		// offsetting
 		x = x - o;
@@ -111,7 +111,7 @@ public class RenderUtils
 	{
 		RenderHelper.enableStandardItemLighting();
 		Tessellator tessellator = Tessellator.getInstance();
-		WorldRenderer worldRenderer = tessellator.getWorldRenderer();
+		VertexBuffer worldRenderer = tessellator.getBuffer();
 		worldRenderer.begin(GL11.GL_LINES, DefaultVertexFormats.POSITION);
 		GlStateManager.color(r, g, b, a);
 		GL11.glLineWidth(thickness);
@@ -129,7 +129,7 @@ public class RenderUtils
 		RenderHelper.disableStandardItemLighting();
 	}
 
-	private static void renderSingleOutline(WorldRenderer renderer, float ox, float oy, float oz, float off)
+	private static void renderSingleOutline(VertexBuffer renderer, float ox, float oy, float oz, float off)
 	{
 		ox = ox - off;
 		oy = oy - off;

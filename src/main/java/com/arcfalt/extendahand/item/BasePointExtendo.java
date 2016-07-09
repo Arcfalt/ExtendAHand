@@ -127,7 +127,7 @@ public class BasePointExtendo extends BaseExtendo
 			return returnVal;
 		}
 
-		if(block == null || block.getMaterial(blockState) == Material.air)
+		if(block == null || block.getMaterial(blockState) == Material.AIR)
 		{
 			flipPointTarget(itemStackIn);
 			return returnVal;

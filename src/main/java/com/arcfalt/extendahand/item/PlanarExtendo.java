@@ -102,7 +102,7 @@ public class PlanarExtendo extends BasePointExtendo
 						BlockPos acting = new BlockPos(x, y, z);
 						IBlockState blockState = world.getBlockState(acting);
 						Block block = blockState.getBlock();
-						if(block.getMaterial(blockState) == Material.air)
+						if(block.getMaterial(blockState) == Material.AIR)
 						{
 							amount += 1;
 							if(amount > maxBlocks && trimAmount)

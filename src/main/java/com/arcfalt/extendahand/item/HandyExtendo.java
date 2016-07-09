@@ -70,7 +70,7 @@ public class HandyExtendo extends BaseExtendo
 		IBlockState blockState = world.getBlockState(offsetPos);
 		Block block = blockState.getBlock();
 
-		if(block.getMaterial(blockState) == Material.air) positions.add(offsetPos);
+		if(block.getMaterial(blockState) == Material.AIR) positions.add(offsetPos);
 		return positions;
 	}
 }

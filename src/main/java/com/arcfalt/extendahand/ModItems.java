@@ -44,15 +44,15 @@ public class ModItems
 	{
 		if(!Config.baseCreativeOnly)
 		{
-			GameRegistry.addRecipe(new ItemStack(handyExtendo), ".P.", "IDI", ".P.", 'I', Items.ender_pearl, 'D', Items.diamond, 'P', Blocks.piston);
+			GameRegistry.addRecipe(new ItemStack(handyExtendo), ".P.", "IDI", ".P.", 'I', Items.ENDER_PEARL, 'D', Items.DIAMOND, 'P', Blocks.PISTON);
 		}
 		if(!Config.lineCreativeOnly)
 		{
-			GameRegistry.addRecipe(new ItemStack(extendedExtendo), "BPB", "IEI", "BSB", 'I', Items.ender_eye, 'E', handyExtendo, 'B', Items.blaze_rod, 'P', Blocks.piston, 'S', Blocks.sticky_piston);
+			GameRegistry.addRecipe(new ItemStack(extendedExtendo), "BPB", "IEI", "BSB", 'I', Items.ENDER_EYE, 'E', handyExtendo, 'B', Items.BLAZE_ROD, 'P', Blocks.PISTON, 'S', Blocks.STICKY_PISTON);
 		}
 		if(!Config.boxCreativeOnly)
 		{
-			GameRegistry.addRecipe(new ItemStack(planarExtendo), "BSB", "IEI", "WSW", 'I', Items.ender_eye, 'E', handyExtendo, 'B', Items.ghast_tear, 'S', Blocks.sticky_piston, 'W', new ItemStack(Items.potionitem, 1, 8203));
+			GameRegistry.addRecipe(new ItemStack(planarExtendo), "BSB", "IEI", "WSW", 'I', Items.ENDER_EYE, 'E', handyExtendo, 'B', Items.GHAST_TEAR, 'S', Blocks.STICKY_PISTON, 'W', new ItemStack(Items.POTIONITEM, 1, 8203));
 		}
 	}
 }

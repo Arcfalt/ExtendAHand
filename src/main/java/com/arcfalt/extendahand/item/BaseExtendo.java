@@ -84,7 +84,7 @@ public class BaseExtendo extends Item
 		// Make sure the block is valid
 		IBlockState blockState = world.getBlockState(blockPos);
 		Block block = blockState.getBlock();
-		if(block == null || block.getMaterial(blockState) == Material.air) return null;
+		if(block == null || block.getMaterial(blockState) == Material.AIR) return null;
 
 		// All valid, return it
 		return blockPos;
@@ -126,7 +126,7 @@ public class BaseExtendo extends Item
 		if(!tags.hasKey("extendoResource")) return fallbackState;
 		NBTTagCompound eTag = (NBTTagCompound)tags.getTag("extendoResource");
 		if(!eTag.hasKey("block") || !eTag.hasKey("meta")) return fallbackState;
-		Block block = Block.blockRegistry.getObjectById(eTag.getInteger("block"));
+		Block block = Block.REGISTRY.getObjectById(eTag.getInteger("block"));
 		if(block == null) return fallbackState;
 		IBlockState state = block.getStateFromMeta(eTag.getInteger("meta"));
 		if(state == null) return fallbackState;
@@ -159,7 +159,7 @@ public class BaseExtendo extends Item
 		}
 		IBlockState blockState = worldIn.getBlockState(blockPos);
 		Block block = blockState.getBlock();
-		if(block == null || block.getMaterial(blockState) == Material.air)
+		if(block == null || block.getMaterial(blockState) == Material.AIR)
 		{
 			sendMessage("No block targeted!", playerIn);
 			return returnVal;
@@ -181,10 +181,10 @@ public class BaseExtendo extends Item
 		if(pos == null) return EnumActionResult.PASS;
 		IBlockState blockState = worldIn.getBlockState(pos);
 		Block block = blockState.getBlock();
-		if(block == null || block.getMaterial(blockState) == Material.air) return EnumActionResult.PASS;
+		if(block == null || block.getMaterial(blockState) == Material.AIR) return EnumActionResult.PASS;
 		if(worldIn.isRemote) return EnumActionResult.SUCCESS;
 
-		int blockId = Block.blockRegistry.getIDForObject(block);
+		int blockId = Block.REGISTRY.getIDForObject(block);
 		int blockMeta = block.getMetaFromState(blockState);
 		NBTTagCompound tags = ItemUtils.getOrCreateTagCompound(stack);
 		if(tags.hasKey("extendoResource"))
@@ -212,7 +212,7 @@ public class BaseExtendo extends Item
 	public boolean getIsRepairable(ItemStack toRepair, ItemStack repair)
 	{
 		if(!isDamageable()) return super.getIsRepairable(toRepair, repair);
-		return repair.getItem() == Items.ender_pearl || repair.getItem() == Items.ender_eye || super.getIsRepairable(toRepair, repair);
+		return repair.getItem() == Items.ENDER_PEARL || repair.getItem() == Items.ENDER_EYE || super.getIsRepairable(toRepair, repair);
 	}
 
 	public boolean getHasCooldown()

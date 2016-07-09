@@ -85,7 +85,7 @@ public class ExtendedExtendo extends BaseExtendo
 	{
 		IBlockState blockState = world.getBlockState(blockPos);
 		Block block = blockState.getBlock();
-		if(block.getMaterial(blockState) == Material.air) positions.add(blockPos);
+		if(block.getMaterial(blockState) == Material.AIR) positions.add(blockPos);
 	}
 
 	private BlockPos fillPosXLine(Set<BlockPos> positions, BlockPos playerPos, BlockPos blockPos, World world)

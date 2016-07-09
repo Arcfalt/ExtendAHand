@@ -19,9 +19,9 @@ group= "com.arcfalt.extendahand"
 archivesBaseName = "ExtendAHand"
 
 minecraft {
-    version = "1.9-12.16.0.1835-1.9"
+    version = "1.9-12.16.1.1887"
     runDir = "run"
-    mappings = "snapshot_20160402"
+    mappings = "snapshot_20160312"
 }
 
 dependencies {
@@ -48,8 +48,7 @@ dependencies {
 
 }
 
-processResources
-{
+processResources {
     // this will ensure that this task is redone when the versions change.
     inputs.property "version", project.version
     inputs.property "mcversion", project.minecraft.version
@@ -65,5 +64,11 @@ processResources
     // copy everything else, thats not the mcmod.info
     from(sourceSets.main.resources.srcDirs) {
         exclude 'mcmod.info'
+    }
+}
+
+idea {
+    module {
+        inheritOutputDirs = true
     }
 }

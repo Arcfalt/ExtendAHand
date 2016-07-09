@@ -35,6 +35,8 @@ public class ExtendoPlaceHandler implements IMessageHandler<ExtendoPlaceMessage,
 				NetHandlerPlayServer serverHandler = ctx.getServerHandler();
 				EntityPlayer player = serverHandler.playerEntity;
 
+				// Currently only operates from main hand
+				// Possible future plan to allow off-hand to act as a modifier or similar
 				ItemStack heldStack = player.getHeldItem(EnumHand.MAIN_HAND);
 				Item heldItem = heldStack.getItem();
 				if(!(heldItem instanceof BaseExtendo)) return;
